@@ -3,10 +3,11 @@
 //  [VIRTUAL IDENTITY] — Creates account with bcrypt-hashed password
 // ============================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
 function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -16,6 +17,12 @@ function RegisterPage() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // 🎵 Play main menu music
+  useEffect(() => {
+    playMusic(TRACKS.MENU);
+    return () => stopMusic();
+  }, []);
 
   // [EVENT HANDLER] — Form submit triggers POST /api/auth/register
   async function handleSubmit(e) {

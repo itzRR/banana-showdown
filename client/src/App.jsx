@@ -16,7 +16,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
 function App() {
-  const { loading } = useAuth();
+  const { user, loading } = useAuth();
 
   // Wait for session check before rendering routes
   if (loading) {
@@ -32,9 +32,9 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {/* Public routes — redirect to /select if already logged in */}
+        <Route path="/login"    element={user ? <Navigate to="/select" replace /> : <LoginPage />} />
+        <Route path="/register" element={user ? <Navigate to="/select" replace /> : <RegisterPage />} />
 
         {/* Protected routes — require login */}
         <Route path="/select" element={

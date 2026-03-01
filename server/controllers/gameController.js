@@ -12,9 +12,9 @@ const BANANA_API_URL = 'http://marcconrad.com/uob/banana/api.php?out=json';
 
 // Each action has a base multiplier that affects the final score
 const ACTION_MULTIPLIERS = {
-  attack: 1.0,       // Standard attack — 1x multiplier
-  randomSkill: 1.5,  // Random skill — 1.5x boost
-  bananaPower: 2.0   // Banana Power — ultimate move, 2x multiplier
+  attack:      1.0,   // Standard attack
+  randomSkill: 1.25,  // Random skill — 1.25x boost
+  bananaPower: 1.5    // Banana Power — ultimate, 1.5x multiplier
 };
 
 // POST /api/game/play
@@ -46,7 +46,7 @@ async function play(req, res) {
     // Player's final power = basePower + (bananaNumber * 10) * multiplier
     // Opponent gets a fixed random power between 50–100
     const playerPower = Math.floor((character.basePower + bananaNumber * 10) * multiplier);
-    const opponentPower = Math.floor(Math.random() * 51) + 50; // 50–100
+    const opponentPower = Math.floor(Math.random() * 91) + 70; // 70–160
 
     const playerWins = playerPower > opponentPower;
     const score = playerWins ? playerPower : 0;

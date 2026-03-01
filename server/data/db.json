@@ -11,6 +11,12 @@
       "username": "testplayer222",
       "password": "$2a$10$/YB8cvLnKrOGAkvnn7.CwOty1q/Y1ZrTGeJ.RwvFMYSNvXKRnQr/q",
       "createdAt": "2026-03-01T11:10:37.900Z"
+    },
+    {
+      "id": "user_1772367517490",
+      "username": "RR",
+      "password": "$2a$10$lNON4KdC5raaTdkPGtF8b.a7KiNaZeRFUHJsZ8YzDi/3bAG3OI9.e",
+      "createdAt": "2026-03-01T12:18:37.490Z"
     }
   ],
   "leaderboard": [
@@ -49,6 +55,42 @@
       "score": 85,
       "result": "win",
       "playedAt": "2026-03-01T11:11:23.602Z"
+    },
+    {
+      "id": "match_1772367552820",
+      "username": "RR",
+      "character": "Rehan",
+      "action": "attack",
+      "playerPower": 98,
+      "opponentPower": 51,
+      "bananaNumber": 2,
+      "score": 98,
+      "result": "win",
+      "playedAt": "2026-03-01T12:19:12.820Z"
+    },
+    {
+      "id": "match_1772367585791",
+      "username": "RR",
+      "character": "Rehan",
+      "action": "randomSkill",
+      "playerPower": 147,
+      "opponentPower": 76,
+      "bananaNumber": 2,
+      "score": 147,
+      "result": "win",
+      "playedAt": "2026-03-01T12:19:45.791Z"
+    },
+    {
+      "id": "match_1772381775455",
+      "username": "RR",
+      "character": "Frank",
+      "action": "bananaPower",
+      "playerPower": 180,
+      "opponentPower": 68,
+      "bananaNumber": 1,
+      "score": 180,
+      "result": "win",
+      "playedAt": "2026-03-01T16:16:15.455Z"
     }
   ]
 }

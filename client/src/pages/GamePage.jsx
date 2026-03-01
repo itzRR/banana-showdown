@@ -5,7 +5,7 @@
 //                           which then calls the Banana API
 // ============================================================
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -13,6 +13,7 @@ import {
   soundAttack, soundRandomSkill, soundBananaPower,
   soundOracle, soundWin, soundLose, soundClick
 } from '../utils/sounds';
+import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
 // Opponent definition
 const OPPONENT = {
@@ -30,8 +31,31 @@ function GamePage() {
   const character = location.state?.character;
 
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);   // last battle result
+  const [result, setResult] = useState(null);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [error, setError] = useState('');
+  const resultRef = useRef(null);
+
+  // 🎵 Battle music on mount → Victory on win
+  useEffect(() => {
+    playMusic(TRACKS.BATTLE);
+    return () => stopMusic();
+  }, []);
+
+  useEffect(() => {
+    if (result?.result === 'win') {
+      setTimeout(() => playMusic(TRACKS.VICTORY), 300);
+    }
+  }, [result]);
+
+  // Auto-scroll to result banner when it appears
+  useEffect(() => {
+    if (result && resultRef.current) {
+      setTimeout(() => {
+        resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 150);
+    }
+  }, [result]);
 
   // Redirect to select if no character chosen
   if (!character) {
@@ -60,10 +84,8 @@ function GamePage() {
     if (action === 'bananaPower')  soundBananaPower();
 
     try {
-      // 🔊 Subtle oracle ping while waiting for Banana API
       setTimeout(soundOracle, 450);
 
-      // [API INTEROPERABILITY] — Frontend → Backend → Banana API
       const res = await axios.post(
         '/api/game/play',
         { character: { name: character.name, basePower: character.basePower }, action },
@@ -72,7 +94,6 @@ function GamePage() {
 
       setResult(res.data);
 
-      // 🔊 Play result sound after a short delay so it lands as the banner appears
       setTimeout(() => {
         if (res.data.result === 'win') soundWin();
         else soundLose();
@@ -104,7 +125,12 @@ function GamePage() {
       <div className="game-layout">
         {/* Player */}
         <div className="card fighter-panel">
-          <span className="fighter-avatar">{character.avatar}</span>
+          {character.image
+            ? <img src={character.image} alt={character.name}
+                style={{ width: 90, height: 90, objectFit: 'cover', objectPosition: 'top',
+                         borderRadius: 12, marginBottom: 10, border: '2px solid var(--border-bright)' }} />
+            : <span className="fighter-avatar">{character.avatar}</span>
+          }
           <div className="fighter-label">Your Fighter</div>
           <div className="fighter-name">{character.name}</div>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 16 }}>
@@ -194,13 +220,87 @@ function GamePage() {
             className="action-btn banana-power"
             onClick={() => handleAction('bananaPower')}
             disabled={loading}
-            title="Banana Power ultimate — 2x power multiplier"
+            title="Banana Power ultimate — 1.5x power multiplier"
           >
             <span className="action-icon">🍌</span>
             <span>Banana Power</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>2x power</span>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>1.5x power</span>
           </button>
         </div>
+      </div>
+
+      {/* ── How It Works panel ─────────────────────────── */}
+      <div className="how-it-works-wrap" style={{ marginTop: 16 }}>
+        <button
+          className="how-it-works-toggle"
+          onClick={() => setShowHowItWorks(v => !v)}
+          id="how-it-works-btn"
+        >
+          {showHowItWorks ? '▲' : '▼'} &nbsp;❓ How does this work?
+        </button>
+
+        {showHowItWorks && (
+          <div className="how-it-works-panel">
+            <h3 style={{ marginBottom: 16, color: 'var(--yellow)' }}>🍌 How the Battle Works</h3>
+
+            <div className="hiw-steps">
+              {/* Step 1 */}
+              <div className="hiw-step">
+                <div className="hiw-step-num">1</div>
+                <div>
+                  <strong>Pick your move</strong>
+                  <p>Each move has a different power multiplier:</p>
+                  <div className="hiw-moves">
+                    <span>⚔️ Attack &nbsp;<b>×1.0</b></span>
+                    <span>🎲 Random Skill &nbsp;<b>×1.25</b></span>
+                    <span>🍌 Banana Power &nbsp;<b>×1.5</b></span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="hiw-step">
+                <div className="hiw-step-num">2</div>
+                <div>
+                  <strong>The Banana Puzzle gives a secret number</strong>
+                  <p>
+                    The 🍌 Banana API sends a random math puzzle image.
+                    The <em>answer</em> to that puzzle is a number from <b>0 to 9</b> — this is your <b>luck modifier</b>.
+                    Higher = better!
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="hiw-step">
+                <div className="hiw-step-num">3</div>
+                <div>
+                  <strong>Your power is calculated</strong>
+                  <div className="hiw-formula">
+                    Your Power = ( Base Power + Banana Number × 10 ) × Multiplier
+                  </div>
+                  <p className="hiw-example">
+                    Example: Base 75 · Banana = 6 · Banana Power (×1.5)<br />
+                    → ( 75 + 60 ) × 1.5 = <b style={{ color: 'var(--yellow)' }}>202</b>
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 4 */}
+              <div className="hiw-step">
+                <div className="hiw-step-num">4</div>
+                <div>
+                  <strong>Beat the opponent to win!</strong>
+                  <p>
+                    The opponent has a <b>random power between 70–160</b>.
+                    If <span style={{ color: 'var(--yellow)' }}>Your Power</span> &gt; <span style={{ color: 'var(--red)' }}>Opponent Power</span> → 🏆 Victory!
+                    Otherwise → 💀 Defeated.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Loading state */}
