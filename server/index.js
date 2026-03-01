@@ -1,6 +1,7 @@
 // ============================================================
 //  Banana Showdown — Server Entry Point
 //  Sets up Express app, middleware, and mounts all routes
+//  Exported as a module for Vercel serverless deployment
 // ============================================================
 
 const express = require('express');
@@ -18,28 +19,24 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 
-// Allow the Vite dev server (client) to call the backend
+// CORS: allow localhost in dev, Vercel URL in prod
 const allowedOrigins = [
   'http://localhost:5173',
-  process.env.CLIENT_URL,          // e.g. https://banana-showdown.vercel.app
+  process.env.CLIENT_URL,
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, cb) => {
+    // Allow same-origin requests (no origin header) and allowed origins
     if (!origin || allowedOrigins.includes(origin)) cb(null, true);
     else cb(new Error('Not allowed by CORS'));
   },
-  credentials: true // required for cookies
+  credentials: true
 }));
 
 // --- Routes ---
-// [AUTH] Virtual identity / session management
 app.use('/api/auth', authRoutes);
-
-// [GAME] Gameplay & Banana API interoperability
 app.use('/api/game', gameRoutes);
-
-// [LEADERBOARD] Match result storage and retrieval
 app.use('/api/leaderboard', leaderboardRoutes);
 
 // Health check
@@ -47,6 +44,13 @@ app.get('/', (req, res) => {
   res.json({ message: 'Banana Showdown API is running 🍌' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🍌 Banana Showdown server running on http://localhost:${PORT}`);
-});
+// Only start HTTP server when running locally (not on Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🍌 Banana Showdown server running on http://localhost:${PORT}`);
+  });
+}
+
+// Export for Vercel serverless runtime
+module.exports = app;
+
