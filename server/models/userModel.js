@@ -1,38 +1,27 @@
 // ============================================================
-//  User Model — In-memory + Local File Fallback
-//  Uses require() so Vercel bundles the JSON file.
-//  Writes to db.json locally, but stays in-memory on Vercel.
+//  User Model — Remote DB sync via db.js
 // ============================================================
 
-const fs = require('fs');
-const path = require('path');
-const seed = require('../data/db.json');
-const DB_PATH = path.join(__dirname, '../data/db.json');
+const { getDB, saveDB } = require('./db');
 
-// In-memory array (used by Vercel between cold starts)
-let users = Array.isArray(seed.users) ? [...seed.users] : [];
-
-function findUserByUsername(username) {
+async function findUserByUsername(username) {
+  const db = await getDB();
+  const users = db.users || [];
   return users.find(u => u.username === username) || null;
 }
 
-function findUserById(id) {
+async function findUserById(id) {
+  const db = await getDB();
+  const users = db.users || [];
   return users.find(u => u.id === id) || null;
 }
 
-function saveUser(user) {
-  users.push(user);
+async function saveUser(user) {
+  const db = await getDB();
+  if (!db.users) db.users = [];
   
-  // Try to write to disk (works locally, fails gracefully on Vercel)
-  try {
-    const raw = fs.readFileSync(DB_PATH, 'utf-8');
-    const fullDb = JSON.parse(raw);
-    fullDb.users = users;
-    fs.writeFileSync(DB_PATH, JSON.stringify(fullDb, null, 2));
-  } catch (err) {
-    // Vercel read-only filesystem triggers this — safe to ignore
-    console.log('Skipped local save (Vercel read-only FS or missing file).');
-  }
+  db.users.push(user);
+  await saveDB(db);
 }
 
 module.exports = { findUserByUsername, findUserById, saveUser };

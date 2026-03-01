@@ -64,7 +64,7 @@ async function play(req, res) {
       result: playerWins ? 'win' : 'lose',
       playedAt: new Date().toISOString()
     };
-    addEntry(entry);
+    await addEntry(entry);
 
     // Return full result to frontend
     return res.json({

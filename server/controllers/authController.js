@@ -26,7 +26,8 @@ async function register(req, res) {
   }
 
   // Check if username already taken
-  if (findUserByUsername(username)) {
+  const existingUser = await findUserByUsername(username);
+  if (existingUser) {
     return res.status(409).json({ error: 'Username already taken.' });
   }
 
@@ -40,7 +41,7 @@ async function register(req, res) {
     createdAt: new Date().toISOString()
   };
 
-  saveUser(newUser);
+  await saveUser(newUser);
 
   // Issue JWT and set in HTTP-only cookie
   const token = jwt.sign({ id: newUser.id, username: newUser.username }, JWT_SECRET, { expiresIn: '1d' });
@@ -57,7 +58,7 @@ async function login(req, res) {
     return res.status(400).json({ error: 'Username and password are required.' });
   }
 
-  const user = findUserByUsername(username);
+  const user = await findUserByUsername(username);
   if (!user) {
     return res.status(401).json({ error: 'Invalid username or password.' });
   }
