@@ -78,6 +78,9 @@ function GamePage() {
     setError('');
     setResult(null);
 
+    // 🎵 Switch back to battle music when starting a new round (after victory)
+    playMusic(TRACKS.BATTLE);
+
     // 🔊 Play immediate action sound on button press
     if (action === 'attack')       soundAttack();
     if (action === 'randomSkill')  soundRandomSkill();
