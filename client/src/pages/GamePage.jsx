@@ -163,7 +163,9 @@ function GamePage() {
 
         {/* Opponent */}
         <div className="card fighter-panel">
-          <span className="fighter-avatar">{OPPONENT.avatar}</span>
+          <img src="/characters/banana boss.webp" alt="Banana Boss"
+              style={{ width: 90, height: 90, objectFit: 'cover', objectPosition: 'top',
+                       borderRadius: 12, marginBottom: 10, border: '2px solid var(--red)' }} />
           <div className="fighter-label">Opponent</div>
           <div className="fighter-name">{OPPONENT.name}</div>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 16 }}>
@@ -332,15 +334,26 @@ function GamePage() {
                 id="banana-puzzle-image"
               />
             )}
-            <div className="puzzle-answer">
-              <span className="puzzle-answer-label">Solution modifier:</span>
-              <span className="puzzle-answer-number" id="banana-solution">{result.bananaNumber}</span>
+            <div className="puzzle-answer" style={{ flexDirection: 'column', gap: 8 }}>
+              <div>
+                <span className="puzzle-answer-label">Solution modifier:</span>
+                <span className="puzzle-answer-number" id="banana-solution">{result.bananaNumber}</span>
+              </div>
+              
+              <div style={{
+                background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: 8,
+                fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: 12,
+                border: '1px solid var(--border)'
+              }}>
+                <div style={{ marginBottom: 4, color: 'var(--text-primary)', fontWeight: 600 }}>Final Power Calculation:</div>
+                <div>
+                  ( <span style={{color:'var(--text-primary)'}}>{character.basePower} Base</span> +&nbsp;
+                  <span style={{color:'var(--yellow)'}}>{result.bananaNumber * 10} Banana</span> )
+                  × <span style={{color:'var(--orange)'}}>{result.multiplier} Multiplier</span>
+                  &nbsp;=&nbsp; <strong style={{color:'var(--yellow)', fontSize:'1.1rem'}}>{result.playerPower} Power</strong>
+                </div>
+              </div>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: 8 }}>
-              Multiplier: <strong style={{ color: 'var(--yellow)' }}>{result.multiplier}x</strong>
-              &nbsp;→ Your final power: <strong style={{ color: 'var(--yellow)' }}>{result.playerPower}</strong>
-              &nbsp; vs Opponent: <strong style={{ color: 'var(--red)' }}>{result.opponentPower}</strong>
-            </p>
           </div>
 
           {/* Battle result */}
