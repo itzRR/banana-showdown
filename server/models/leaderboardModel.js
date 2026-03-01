@@ -1,34 +1,21 @@
 // ============================================================
-//  Leaderboard Model — Read/write leaderboard from JSON DB
+//  Leaderboard Model — In-memory storage seeded from db.json
+//  Uses require() so Vercel bundles the JSON file.
+//  Writes are in-memory only (Vercel filesystem is read-only).
 // ============================================================
 
-const fs = require('fs');
-const path = require('path');
+const seed = require('../data/db.json');
+let leaderboard = Array.isArray(seed.leaderboard) ? [...seed.leaderboard] : [];
 
-const DB_PATH = path.join(__dirname, '../data/db.json');
-
-function readDB() {
-  const raw = fs.readFileSync(DB_PATH, 'utf-8');
-  return JSON.parse(raw);
-}
-
-function writeDB(data) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-}
-
-// Add a new match result entry
 function addEntry(entry) {
-  const db = readDB();
-  db.leaderboard.push(entry);
-  writeDB(db);
+  leaderboard.push(entry);
 }
 
-// Get top 5 entries sorted by score descending
 function getTopFive() {
-  const db = readDB();
-  return db.leaderboard
+  return [...leaderboard]
     .sort((a, b) => b.score - a.score)
     .slice(0, 5);
 }
 
 module.exports = { addEntry, getTopFive };
+

@@ -1,40 +1,24 @@
 // ============================================================
-//  User Model — Read/write users from the JSON "database"
+//  User Model — In-memory storage seeded from db.json
+//  Uses require() so Vercel bundles the JSON file.
+//  Writes are in-memory only (Vercel filesystem is read-only).
 // ============================================================
 
-const fs = require('fs');
-const path = require('path');
+// Load initial data — require() ensures Vercel includes this in the bundle
+const seed = require('../data/db.json');
+let users = Array.isArray(seed.users) ? [...seed.users] : [];
 
-const DB_PATH = path.join(__dirname, '../data/db.json');
-
-// Read the entire database JSON
-function readDB() {
-  const raw = fs.readFileSync(DB_PATH, 'utf-8');
-  return JSON.parse(raw);
-}
-
-// Write the entire database JSON
-function writeDB(data) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-}
-
-// Find a user by username
 function findUserByUsername(username) {
-  const db = readDB();
-  return db.users.find(u => u.username === username) || null;
+  return users.find(u => u.username === username) || null;
 }
 
-// Find a user by their ID
 function findUserById(id) {
-  const db = readDB();
-  return db.users.find(u => u.id === id) || null;
+  return users.find(u => u.id === id) || null;
 }
 
-// Save a new user to the database
 function saveUser(user) {
-  const db = readDB();
-  db.users.push(user);
-  writeDB(db);
+  users.push(user);
 }
 
 module.exports = { findUserByUsername, findUserById, saveUser };
+
