@@ -211,11 +211,11 @@ function GamePage() {
             className="action-btn random-skill"
             onClick={() => handleAction('randomSkill')}
             disabled={loading}
-            title="Random skill — 1.5x power multiplier"
+            title="Random skill — 1.25x power multiplier"
           >
             <span className="action-icon">🎲</span>
             <span>Random Skill</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>1.5x power</span>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>1.25x power</span>
           </button>
 
           {/* [EVENT] Banana Power — ultimate move */}
