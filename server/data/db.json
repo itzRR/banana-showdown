@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "id": "user_1772362917756",
+      "username": "testplayer1",
+      "password": "$2a$10$zEcbdTqd385N60ADqO6TXen5d6iqAOYHWdvaq0Wns1OeY.endbGmS",
+      "createdAt": "2026-03-01T11:01:57.756Z"
+    },
+    {
+      "id": "user_1772363437900",
+      "username": "testplayer222",
+      "password": "$2a$10$/YB8cvLnKrOGAkvnn7.CwOty1q/Y1ZrTGeJ.RwvFMYSNvXKRnQr/q",
+      "createdAt": "2026-03-01T11:10:37.900Z"
+    }
+  ],
+  "leaderboard": [
+    {
+      "id": "match_1772362986973",
+      "username": "testplayer1",
+      "character": "Emberwing",
+      "action": "attack",
+      "playerPower": 150,
+      "opponentPower": 66,
+      "bananaNumber": 6,
+      "score": 150,
+      "result": "win",
+      "playedAt": "2026-03-01T11:03:06.973Z"
+    },
+    {
+      "id": "match_1772363014277",
+      "username": "testplayer1",
+      "character": "Emberwing",
+      "action": "bananaPower",
+      "playerPower": 240,
+      "opponentPower": 57,
+      "bananaNumber": 3,
+      "score": 240,
+      "result": "win",
+      "playedAt": "2026-03-01T11:03:34.277Z"
+    },
+    {
+      "id": "match_1772363483602",
+      "username": "testplayer222",
+      "character": "Iron Fist",
+      "action": "attack",
+      "playerPower": 85,
+      "opponentPower": 56,
+      "bananaNumber": 1,
+      "score": 85,
+      "result": "win",
+      "playedAt": "2026-03-01T11:11:23.602Z"
+    }
+  ]
+}
