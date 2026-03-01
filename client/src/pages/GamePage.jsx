@@ -348,7 +348,7 @@ function GamePage() {
                 <div style={{ marginBottom: 4, color: 'var(--text-primary)', fontWeight: 600 }}>Final Power Calculation:</div>
                 <div>
                   ( <span style={{color:'var(--text-primary)'}}>{character.basePower} Base</span> +&nbsp;
-                  <span style={{color:'var(--yellow)'}}>{result.bananaNumber * 10} Banana</span> )
+                  <span style={{color:'var(--yellow)'}}>{result.bananaNumber} × 10 Banana</span> )
                   × <span style={{color:'var(--orange)'}}>{result.multiplier} Multiplier</span>
                   &nbsp;=&nbsp; <strong style={{color:'var(--yellow)', fontSize:'1.1rem'}}>{result.playerPower} Power</strong>
                 </div>
