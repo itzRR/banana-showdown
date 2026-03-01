@@ -48,7 +48,7 @@ export function playMusic(src) {
 
   const audio      = new Audio(src);
   audio.loop       = true;
-  audio.volume     = 0.30;
+  audio.volume     = 0.15;
   audio.muted      = _muted;
 
   currentAudio = audio;
