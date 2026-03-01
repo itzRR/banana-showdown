@@ -14,7 +14,7 @@ function LeaderboardPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/api/leaderboard', { withCredentials: true })
+    api.get('/api/leaderboard')
       .then(res => setEntries(res.data))
       .catch(() => setError('Could not load leaderboard.'))
       .finally(() => setLoading(false));
