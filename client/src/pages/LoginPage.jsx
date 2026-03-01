@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
@@ -31,10 +31,7 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await axios.post('/api/auth/login',
-        { username, password },
-        { withCredentials: true }
-      );
+      const res = await api.post('/api/auth/login', { username, password });
       login({ username: res.data.username });
       navigate('/select');
     } catch (err) {

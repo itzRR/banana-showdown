@@ -7,7 +7,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import {
   soundAttack, soundRandomSkill, soundBananaPower,
@@ -86,10 +86,9 @@ function GamePage() {
     try {
       setTimeout(soundOracle, 450);
 
-      const res = await axios.post(
+      const res = await api.post(
         '/api/game/play',
-        { character: { name: character.name, basePower: character.basePower }, action },
-        { withCredentials: true }
+        { character: { name: character.name, basePower: character.basePower }, action }
       );
 
       setResult(res.data);

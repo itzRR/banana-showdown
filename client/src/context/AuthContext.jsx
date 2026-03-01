@@ -4,7 +4,7 @@
 // ============================================================
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 
 const AuthContext = createContext(null);
 
@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
   // On app load, check if there's an existing session (JWT cookie)
   useEffect(() => {
-    axios.get('/api/auth/me', { withCredentials: true })
+    api.get('/api/auth/me')
       .then(res => setUser(res.data))
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
 
   // Called on logout
   async function logout() {
-    await axios.post('/api/auth/logout', {}, { withCredentials: true });
+    await api.post('/api/auth/logout', {});
     setUser(null);
   }
 

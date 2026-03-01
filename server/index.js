@@ -19,8 +19,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Allow the Vite dev server (client) to call the backend
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.CLIENT_URL,          // e.g. https://banana-showdown.vercel.app
+].filter(Boolean);
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: (origin, cb) => {
+    if (!origin || allowedOrigins.includes(origin)) cb(null, true);
+    else cb(new Error('Not allowed by CORS'));
+  },
   credentials: true // required for cookies
 }));
 
