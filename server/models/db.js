@@ -28,7 +28,7 @@ async function getDB() {
   if (JSONBIN_URL && JSONBIN_KEY) {
     try {
       const res = await axios.get(JSONBIN_URL, {
-        headers: { 'X-Access-Key': JSONBIN_KEY }
+        headers: { 'X-Master-Key': JSONBIN_KEY }
       });
       memoryCache = res.data.record;
       return memoryCache;
@@ -57,7 +57,7 @@ async function saveDB(newDbData) {
       await axios.put(JSONBIN_URL, newDbData, {
         headers: {
           'Content-Type': 'application/json',
-          'X-Access-Key': JSONBIN_KEY
+          'X-Master-Key': JSONBIN_KEY
         }
       });
       return true;
