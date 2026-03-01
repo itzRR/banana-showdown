@@ -7,21 +7,10 @@
 const fs = require('fs');
 const path = require('path');
 const seed = require('../data/db.json');
-
 const DB_PATH = path.join(__dirname, '../data/db.json');
-let users = Array.isArray(seed.users) ? [...seed.users] : [];
 
-function saveLocally() {
-  if (process.env.NODE_ENV !== 'production') {
-    try {
-      const fullDb = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-      fullDb.users = users;
-      fs.writeFileSync(DB_PATH, JSON.stringify(fullDb, null, 2));
-    } catch (err) {
-      console.error('Failed to save users locally:', err.message);
-    }
-  }
-}
+// In-memory array (used by Vercel between cold starts)
+let users = Array.isArray(seed.users) ? [...seed.users] : [];
 
 function findUserByUsername(username) {
   return users.find(u => u.username === username) || null;
@@ -33,7 +22,17 @@ function findUserById(id) {
 
 function saveUser(user) {
   users.push(user);
-  saveLocally();
+  
+  // Try to write to disk (works locally, fails gracefully on Vercel)
+  try {
+    const raw = fs.readFileSync(DB_PATH, 'utf-8');
+    const fullDb = JSON.parse(raw);
+    fullDb.users = users;
+    fs.writeFileSync(DB_PATH, JSON.stringify(fullDb, null, 2));
+  } catch (err) {
+    // Vercel read-only filesystem triggers this — safe to ignore
+    console.log('Skipped local save (Vercel read-only FS or missing file).');
+  }
 }
 
 module.exports = { findUserByUsername, findUserById, saveUser };
