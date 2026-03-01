@@ -19,20 +19,8 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS: allow localhost in dev, Vercel URL in prod
-const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.CLIENT_URL,
-].filter(Boolean);
-
-app.use(cors({
-  origin: (origin, cb) => {
-    // Allow same-origin requests (no origin header) and allowed origins
-    if (!origin || allowedOrigins.includes(origin)) cb(null, true);
-    else cb(new Error('Not allowed by CORS'));
-  },
-  credentials: true
-}));
+// CORS: allow all origins (frontend + backend are same-domain on Vercel)
+app.use(cors({ origin: true, credentials: true }));
 
 // --- Routes ---
 app.use('/api/auth', authRoutes);
