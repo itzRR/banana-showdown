@@ -34,7 +34,7 @@ function LeaderboardPage() {
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <h1>🏆 Leaderboard</h1>
-          <p>Top 5 highest-scoring battles in Banana Showdown</p>
+          <p>Top 10 highest-scoring battles in Banana Showdown</p>
         </div>
         <button className="btn btn-primary btn-sm" onClick={() => navigate('/game')} id="go-battle-btn">
           ⚔️ Battle Now
