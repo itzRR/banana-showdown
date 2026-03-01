@@ -7,55 +7,124 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { soundSelect, soundClick } from '../utils/sounds';
 
-// Six playable characters with unique stats
+// 13 playable characters — the real squad
 const CHARACTERS = [
   {
-    id: 'warrior',
-    name: 'Iron Fist',
-    avatar: '🥷',
-    basePower: 75,
-    characterClass: 'Warrior',
-    description: 'Brute strength. No mercy.'
+    id: 'rehan',
+    name: 'Rehan',
+    alias: 'Code Commander',
+    avatar: '👨‍💻',
+    basePower: 78,
+    characterClass: 'Balanced Tech Warrior',
+    description: 'Hoodie on, headset up, keyboard glowing. He codes and conquers.'
   },
   {
-    id: 'mage',
-    name: 'Zara Spark',
-    avatar: '🧙‍♀️',
-    basePower: 65,
-    characterClass: 'Mage',
-    description: 'Ancient magic, volatile power.'
+    id: 'thiwanka',
+    name: 'Thiwanka',
+    alias: 'Business Gamer',
+    avatar: '🎮',
+    basePower: 74,
+    characterClass: 'Strategic Attacker',
+    description: 'Casual blazer, controller in hand. Strategy is his weapon.'
   },
   {
-    id: 'archer',
-    name: 'Swift Arrow',
-    avatar: '🏹',
-    basePower: 60,
-    characterClass: 'Ranger',
-    description: 'Never misses. Ever.'
-  },
-  {
-    id: 'robot',
-    name: 'C0R3-X',
-    avatar: '🤖',
-    basePower: 80,
-    characterClass: 'Cyborg',
-    description: 'Engineered for destruction.'
-  },
-  {
-    id: 'dragon',
-    name: 'Emberwing',
-    avatar: '🐉',
-    basePower: 90,
-    characterClass: 'Dragon',
-    description: 'Ancient. Unstoppable. Fiery.'
-  },
-  {
-    id: 'ninja',
-    name: 'Shadow Step',
-    avatar: '🕵️',
+    id: 'dhammika',
+    name: 'Dhammika',
+    alias: 'DJ Voltage',
+    avatar: '🎧',
     basePower: 70,
-    characterClass: 'Ninja',
-    description: 'Strikes before you blink.'
+    characterClass: 'Rhythm Striker',
+    description: 'Neon lights, headphones on. The beat drops — and so do enemies.'
+  },
+  {
+    id: 'sithum',
+    name: 'Sithum',
+    alias: 'Captain Simpstrike',
+    avatar: '🪖',
+    basePower: 76,
+    characterClass: 'Tactical Defender',
+    description: 'Stylized military jacket, soft expression. Tough outside, heart of gold.'
+  },
+  {
+    id: 'supun',
+    name: 'Supun',
+    alias: 'The Geek Master',
+    avatar: '🤓',
+    basePower: 72,
+    characterClass: 'Knowledge Boost',
+    description: 'Glasses on, code symbols orbiting. Raw intellect is his power.'
+  },
+  {
+    id: 'oshan',
+    name: 'Oshan',
+    alias: 'Friendly Dev',
+    avatar: '💻',
+    basePower: 68,
+    characterClass: 'Support Hacker',
+    description: 'Always smiling, laptop aglow. He buffs teammates and breaks firewalls.'
+  },
+  {
+    id: 'dinuka',
+    name: 'Dinuka',
+    alias: 'Cricket Crusher',
+    avatar: '🏏',
+    basePower: 85,
+    characterClass: 'Power Attacker',
+    description: 'Stadium lights, bat raised. Six! Into the crowd — and your health bar.'
+  },
+  {
+    id: 'thimira',
+    name: 'Thimira',
+    alias: 'Hackerman X',
+    avatar: '🕶️',
+    basePower: 88,
+    characterClass: 'Critical Damage',
+    description: 'Dark hoodie, neon matrix swirling. He finds every vulnerability.'
+  },
+  {
+    id: 'frank',
+    name: 'Frank',
+    alias: 'Iron Titan',
+    avatar: '💪',
+    basePower: 92,
+    characterClass: 'Heavy Tank',
+    description: 'Cartoon-style mountain of muscle. Built different. Hits different.'
+  },
+  {
+    id: 'oshadi',
+    name: 'Oshadi',
+    alias: 'Pixel Princess',
+    avatar: '🌸',
+    basePower: 66,
+    characterClass: 'Charm Booster',
+    description: 'Soft pastel glow, anime energy. Underestimate her at your peril.'
+  },
+  {
+    id: 'bathiya',
+    name: 'Bathiya',
+    alias: 'Chill Boss',
+    avatar: '😎',
+    basePower: 73,
+    characterClass: 'Calm Damage',
+    description: 'Relaxed stance, sunset behind him. Cool head, calculated strikes.'
+  },
+  {
+    id: 'madara',
+    name: 'Madara',
+    alias: 'Style King',
+    avatar: '👔',
+    basePower: 77,
+    characterClass: 'Fashion Strike',
+    description: 'Modern streetwear, hero pose. Dripped out and deadly.'
+  },
+  {
+    id: 'avishka',
+    name: 'Avishka',
+    alias: 'Midnight Maverick',
+    avatar: '🔥',
+    basePower: 90,
+    characterClass: 'High-Risk Attacker',
+    description: 'Mature. Confident. Charismatic. "Midnight Strike" hits like a freight train.'
   }
 ];
 
