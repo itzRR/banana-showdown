@@ -62,7 +62,15 @@ function App() {
             cursor: 'pointer', userSelect: 'none',
           }}
         >
-          <div style={{ fontSize: '4rem', marginBottom: 16, animation: 'pulse 1.5s ease-in-out infinite' }}>🍌</div>
+          <img
+            src="/favicon-96x96.png"
+            alt="Banana Showdown Logo"
+            style={{
+              width: 96, height: 96, marginBottom: 16, borderRadius: 20,
+              animation: 'pulse 1.5s ease-in-out infinite',
+              filter: 'drop-shadow(0 0 24px rgba(255,224,102,0.6))',
+            }}
+          />
           <h1 className="splash-title" style={{ color: '#ffe066', fontSize: '2.2rem', fontWeight: 900, marginBottom: 8, letterSpacing: 2 }}>
             Banana Showdown
           </h1>
