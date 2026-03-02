@@ -11,7 +11,7 @@ import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import {
   soundAttack, soundRandomSkill, soundBananaPower,
-  soundOracle, soundWin, soundLose, soundClick
+  soundOracle, soundWin, soundLose, soundClick, soundHover
 } from '../utils/sounds';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
@@ -197,6 +197,7 @@ function GamePage() {
             id="btn-attack"
             className="action-btn attack"
             onClick={() => handleAction('attack')}
+            onMouseEnter={soundHover}
             disabled={loading}
             title="Standard attack — 1x power multiplier"
           >
@@ -210,6 +211,7 @@ function GamePage() {
             id="btn-random-skill"
             className="action-btn random-skill"
             onClick={() => handleAction('randomSkill')}
+            onMouseEnter={soundHover}
             disabled={loading}
             title="Random skill — 1.25x power multiplier"
           >
@@ -223,6 +225,7 @@ function GamePage() {
             id="btn-banana-power"
             className="action-btn banana-power"
             onClick={() => handleAction('bananaPower')}
+            onMouseEnter={soundHover}
             disabled={loading}
             title="Banana Power ultimate — 1.5x power multiplier"
           >
