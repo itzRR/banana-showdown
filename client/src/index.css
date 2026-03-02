@@ -1178,7 +1178,7 @@ body {
 
 /* ---- How It Works Panel ---- */
 .how-it-works-toggle {
-  background: rgba(255,255,255,0.05);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 0.85rem;
