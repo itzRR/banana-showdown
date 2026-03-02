@@ -39,14 +39,20 @@ export function prefetchCharacterVideos() {
   if (prefetchDone) return;
   prefetchDone = true;
 
+  // Prefetch character videos
   CHARACTER_VIDEOS.forEach(src => {
-    // Skip if already added
     if (document.head.querySelector(`link[href="${src}"]`)) return;
-
     const link = document.createElement('link');
     link.rel  = 'prefetch';
     link.as   = 'video';
     link.href = src;
     document.head.appendChild(link);
   });
+
+  // Prefetch fight.mp3 so it plays instantly on Battle confirm
+  const fightLink = document.createElement('link');
+  fightLink.rel  = 'prefetch';
+  fightLink.as   = 'audio';
+  fightLink.href = '/music/fight.mp3';
+  document.head.appendChild(fightLink);
 }
