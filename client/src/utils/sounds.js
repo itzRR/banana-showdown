@@ -13,6 +13,14 @@ function getCtx() {
   return ctx;
 }
 
+/**
+ * Call this once after the very first user gesture (e.g. "Click to Start")
+ * to prime the AudioContext so music/FX can auto-play afterwards.
+ */
+export function unlockAudio() {
+  try { getCtx(); } catch (e) { /* ignore */ }
+}
+
 // Core helper: play an oscillator with optional frequency envelope
 function playTone({ frequency = 440, type = 'sine', duration = 0.15, volume = 0.4,
   freqEnd = null, attack = 0.005, decay = 0.05, sustain = 0.3, release = 0.1 } = {}) {
@@ -123,4 +131,21 @@ export function soundLeaderboard() {
     { frequency: 784, type: 'sine', duration: 0.1, volume: 0.3, delay: 0 },
     { frequency: 1047, type: 'sine', duration: 0.15, volume: 0.35, delay: 0.1 },
   ]);
+}
+
+// Character card hover — subtle soft tick
+export function soundHover() {
+  playTone({ frequency: 660, type: 'sine', duration: 0.07, volume: 0.15, freqEnd: 720 });
+}
+
+// Play fight.mp3 — fired when the Battle confirm button is clicked
+let fightAudio = null;
+export function soundFight() {
+  try {
+    // Stop any previous instance
+    if (fightAudio) { fightAudio.pause(); fightAudio.currentTime = 0; }
+    fightAudio = new Audio('/music/fight.mp3');
+    fightAudio.volume = 0.55;
+    fightAudio.play().catch(() => {});
+  } catch (e) { /* ignore */ }
 }

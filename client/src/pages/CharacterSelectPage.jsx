@@ -9,7 +9,7 @@
 
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { soundSelect, soundClick } from '../utils/sounds';
+import { soundSelect, soundClick, soundHover, soundFight } from '../utils/sounds';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
 // 14 playable characters — the real squad
@@ -177,6 +177,7 @@ function CharacterCard({ char, isSelected, onSelect }) {
   const videoRef = useRef(null);
 
   function handleMouseEnter() {
+    soundHover();
     if (videoRef.current && char.video) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
@@ -214,7 +215,7 @@ function CharacterCard({ char, isSelected, onSelect }) {
             muted
             playsInline
             loop
-            preload="none"
+            preload="metadata"
           />
         )}
         {char.image
@@ -272,7 +273,8 @@ function CharacterSelectPage() {
 
   function handleConfirm() {
     if (!selected) return;
-    soundClick(); // 🔊 confirm click
+    soundClick();  // 🔊 confirm click
+    soundFight();  // 🎮 play fight.mp3
     // Pass selected character via router state to game page
     navigate('/game', { state: { character: selected } });
   }
