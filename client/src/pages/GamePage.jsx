@@ -15,6 +15,15 @@ import {
 } from '../utils/sounds';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
+// All available Banana Boss images
+const BOSS_IMAGES = [
+  '/characters/banana boss.webp',
+  '/characters/banana boss2.webp',
+  '/characters/banana boss3.webp',
+  '/characters/banana boss4.webp',
+  '/characters/banana boss5.webp',
+];
+
 // Opponent definition
 const OPPONENT = {
   name: 'Banana Boss',
@@ -35,6 +44,11 @@ function GamePage() {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [error, setError] = useState('');
   const resultRef = useRef(null);
+
+  // 🎲 Pick a random boss image once per battle session
+  const [bossImage] = useState(
+    () => BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]
+  );
 
   // 🎵 Battle music on mount → Victory on win
   useEffect(() => {
@@ -163,7 +177,7 @@ function GamePage() {
 
         {/* Opponent */}
         <div className="card fighter-panel opponent-panel">
-          <img src="/characters/banana boss.webp" alt="Banana Boss"
+          <img src={bossImage} alt="Banana Boss"
               style={{ width: 130, height: 130, objectFit: 'cover', objectPosition: 'top',
                        borderRadius: 14, marginBottom: 12, border: '2px solid var(--red)' }} />
           <div className="fighter-label">Opponent</div>
