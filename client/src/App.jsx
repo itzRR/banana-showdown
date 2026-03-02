@@ -27,6 +27,8 @@ function App() {
     unlockAudio();
     prefetchCharacterVideos();
     setSplashDone(true);
+    // Notify all mounted pages so they can retry playMusic
+    window.dispatchEvent(new Event('bs:audioUnlocked'));
   }
 
   // Wait for session check before rendering routes

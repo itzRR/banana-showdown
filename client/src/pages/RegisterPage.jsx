@@ -18,10 +18,15 @@ function RegisterPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // 🎵 Play main menu music (AudioContext already unlocked by App splash)
+  // 🎵 Play main menu music — retry via event when splash is clicked
   useEffect(() => {
     playMusic(TRACKS.MENU);
-    return () => stopMusic();
+    const retry = () => playMusic(TRACKS.MENU);
+    window.addEventListener('bs:audioUnlocked', retry);
+    return () => {
+      window.removeEventListener('bs:audioUnlocked', retry);
+      stopMusic();
+    };
   }, []);
 
   // [EVENT HANDLER] — Form submit triggers POST /api/auth/register
