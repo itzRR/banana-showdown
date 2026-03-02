@@ -55,21 +55,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: rgba(10, 10, 15, 0.8);
+  padding: 14px 24px;
+  background: rgba(10, 10, 15, 0.9);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
 }
 
 .navbar-brand {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 800;
   color: var(--yellow);
   text-decoration: none;
   letter-spacing: -0.5px;
+  flex-shrink: 0;
 }
 .navbar-brand span { color: var(--text-primary); }
 
@@ -78,15 +79,17 @@ body {
   align-items: center;
   gap: 8px;
 }
+.navbar-links-desktop { display: flex; }
 
 .nav-link {
   color: var(--text-secondary);
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
   font-weight: 500;
   font-size: 0.9rem;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 .nav-link:hover { color: var(--text-primary); background: var(--bg-card-hover); }
 .nav-link.active { color: var(--yellow); }
@@ -94,11 +97,84 @@ body {
 .nav-user {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
 .nav-username { color: var(--yellow); font-weight: 600; }
+.nav-user-text { white-space: nowrap; }
+
+/* ── Hamburger button ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.hamburger:hover { background: rgba(255,214,51,0.1); border-color: var(--border-bright); }
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+/* X animation when open */
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile nav drawer ── */
+.mobile-nav {
+  position: sticky;
+  top: 57px; /* navbar height */
+  z-index: 190;
+  background: rgba(10, 10, 18, 0.97);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: slideDown 0.2s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mobile-nav-link {
+  display: block;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.18s, color 0.18s;
+}
+.mobile-nav-link:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+.mobile-nav-link.active { color: var(--yellow); background: rgba(255,214,51,0.07); }
+.mobile-nav-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
+}
+.mobile-nav-user {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
 
 /* Music toggle button */
 .music-toggle-btn {
@@ -1133,3 +1209,154 @@ body {
   font-family: monospace; margin-top: 8px;
 }
 .hiw-example { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; line-height: 1.6; }
+
+
+/* ============================================================
+   RESPONSIVE — Mobile-first breakpoints
+   ============================================================ */
+
+/* ── 768px: tablet and below ── */
+@media (max-width: 768px) {
+
+  /* Navbar: hide desktop links, show hamburger */
+  .navbar { padding: 12px 16px; }
+  .navbar-links-desktop { display: none !important; }
+  .nav-logout-desktop { display: none !important; }
+  .nav-user-text { display: none !important; }
+  .hamburger { display: flex !important; }
+
+  /* Page layout */
+  .page { padding: 24px 16px; }
+  .page-header { margin-bottom: 24px; }
+  .page-header h1 { font-size: 1.6rem; }
+
+  /* Character grid — 2 columns */
+  .character-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  /* Game layout — single column stack */
+  .game-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* VS divider — horizontal strip */
+  .vs-divider {
+    flex-direction: row !important;
+    padding: 14px 20px !important;
+    min-width: unset !important;
+    justify-content: center;
+    gap: 16px;
+  }
+  .vs-text { font-size: 1.6rem; }
+
+  /* Fighter panels */
+  .fighter-panel { padding: 20px 16px; }
+  .fighter-name { font-size: 1.15rem; }
+
+  /* Action buttons — 2 columns */
+  .action-buttons { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .action-btn { padding: 16px 8px; gap: 6px; }
+  .action-icon { font-size: 1.5rem; }
+
+  /* Banana puzzle */
+  .puzzle-image { max-width: 100%; }
+
+  /* Result banner */
+  .result-banner { padding: 24px 16px; }
+  .result-title { font-size: 1.5rem; }
+
+  /* Leaderboard — compress */
+  .leaderboard-table td,
+  .leaderboard-table thead th { padding: 10px 10px; font-size: 0.82rem; }
+
+  /* Card */
+  .card { padding: 20px 16px; }
+
+  /* Auth */
+  .auth-page { padding: 16px; }
+  .auth-logo h1 { font-size: 1.7rem; }
+
+  /* Footer */
+  .app-footer { padding: 16px; font-size: 0.8rem; }
+
+  /* Character modal — already handled above */
+  .char-modal-name { font-size: 1.6rem; }
+}
+
+/* ── 480px: phones ── */
+@media (max-width: 480px) {
+
+  /* Navbar brand */
+  .navbar-brand { font-size: 1.1rem; }
+
+  /* Page */
+  .page { padding: 16px 12px; }
+  .page-header h1 { font-size: 1.35rem; }
+
+  /* Character grid — single column */
+  .character-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  /* Action buttons — single column */
+  .action-buttons { grid-template-columns: 1fr; gap: 10px; }
+  .action-btn { flex-direction: row; padding: 14px 16px; justify-content: flex-start; }
+
+  /* Fighter panels */
+  .fighter-panel { padding: 16px 12px; }
+  .fighter-name  { font-size: 1rem; }
+  .fighter-avatar { font-size: 3.5rem; }
+
+  /* Result */
+  .result-emoji { font-size: 2.2rem; }
+  .result-title { font-size: 1.25rem; }
+
+  /* Leaderboard — hide "Games" column on tiny screens */
+  .lb-games-col { display: none; }
+
+  /* Auth */
+  .auth-card { padding: 0; }
+  .auth-logo { margin-bottom: 20px; }
+  .auth-logo h1 { font-size: 1.5rem; }
+
+  /* Splash screen text */
+  .splash-title { font-size: 1.6rem !important; }
+
+  /* Slot machine — shrink */
+  .slot-boss-window { width: 100px; height: 100px; }
+  .slot-reel-img { width: 100px; height: 100px; }
+
+  /* Card */
+  .card { padding: 16px 12px; }
+
+  /* How it works */
+  .how-it-works-panel { padding: 16px; }
+  .hiw-formula { font-size: 0.75rem; word-break: break-word; }
+
+  /* VS */
+  .vs-text { font-size: 1.3rem; }
+
+  /* Post-battle button row */
+  .post-battle-actions {
+    flex-direction: column;
+  }
+  .post-battle-actions .btn { width: 100%; justify-content: center; }
+}
+
+/* ── Touch-friendly tap targets ── */
+@media (hover: none) {
+  .action-btn { padding: 18px 10px; }
+  .btn { padding: 13px 22px; }
+  .nav-link { padding: 10px 14px; }
+  /* Remove hover-only video on touch devices */
+  .character-card:hover .character-video { opacity: 0; }
+  /* Always show description */
+  .character-card .character-description {
+    max-height: 80px;
+    opacity: 1;
+  }
+}

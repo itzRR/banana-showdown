@@ -31,7 +31,7 @@ function LeaderboardPage() {
 
   return (
     <div className="page">
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <h1>🏆 Leaderboard</h1>
           <p>Top 10 highest-scoring battles in Banana Showdown</p>
@@ -68,10 +68,10 @@ function LeaderboardPage() {
                 <th>Rank</th>
                 <th>Player</th>
                 <th>Character</th>
-                <th>Move Used</th>
+                <th className="lb-games-col">Move Used</th>
                 <th>Score</th>
                 <th>Result</th>
-                <th>Date</th>
+                <th className="lb-games-col">Date</th>
               </tr>
             </thead>
             <tbody>
@@ -84,14 +84,14 @@ function LeaderboardPage() {
                   </td>
                   <td><span className="lb-username">{entry.username}</span></td>
                   <td>{entry.character}</td>
-                  <td>{actionLabel(entry.action)}</td>
+                  <td className="lb-games-col">{actionLabel(entry.action)}</td>
                   <td><span className="lb-score">{entry.score}</span></td>
                   <td>
                     <span className={`lb-badge ${entry.result}`}>
                       {entry.result === 'win' ? '✓ Win' : '✗ Loss'}
                     </span>
                   </td>
-                  <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                  <td className="lb-games-col" style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
                     {new Date(entry.playedAt).toLocaleDateString()}
                   </td>
                 </tr>

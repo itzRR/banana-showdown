@@ -63,7 +63,7 @@ function App() {
           }}
         >
           <div style={{ fontSize: '4rem', marginBottom: 16, animation: 'pulse 1.5s ease-in-out infinite' }}>🍌</div>
-          <h1 style={{ color: '#ffe066', fontSize: '2.2rem', fontWeight: 900, marginBottom: 8, letterSpacing: 2 }}>
+          <h1 className="splash-title" style={{ color: '#ffe066', fontSize: '2.2rem', fontWeight: 900, marginBottom: 8, letterSpacing: 2 }}>
             Banana Showdown
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.55)', marginBottom: 40 }}>The ultimate banana battle arena</p>

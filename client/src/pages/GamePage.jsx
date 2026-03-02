@@ -504,7 +504,7 @@ function GamePage() {
           </div>
 
           {/* Post-battle actions */}
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 20, flexWrap: 'wrap' }}>
+          <div className="post-battle-actions" style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 20, flexWrap: 'wrap' }}>
             <button className="btn btn-primary" onClick={() => { soundClick(); setResult(null); }} id="play-again-btn">
               ⚔️ Attack Again
             </button>
