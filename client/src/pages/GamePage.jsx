@@ -46,7 +46,7 @@ function GamePage() {
   const resultRef = useRef(null);
 
   // 🎲 Pick a random boss image once per battle session
-  const [bossImage] = useState(
+  const [bossImage, setBossImage] = useState(
     () => BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]
   );
 
@@ -91,6 +91,9 @@ function GamePage() {
     setLoading(true);
     setError('');
     setResult(null);
+
+    // 🎲 Randomize boss image on every new action!
+    setBossImage(BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]);
 
     // 🎵 Switch back to battle music when starting a new round (after victory)
     playMusic(TRACKS.BATTLE);
