@@ -3,6 +3,7 @@
 //  Defines all routes and wraps protected ones
 // ============================================================
 
+import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
@@ -14,9 +15,19 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import { unlockAudio } from './utils/sounds';
+import { prefetchCharacterVideos } from './utils/prefetch';
 
 function App() {
   const { user, loading } = useAuth();
+  const [splashDone, setSplashDone] = useState(false);
+
+  function handleSplashClick() {
+    // ✅ Inside click handler = inside user gesture = audio.play() allowed
+    unlockAudio();
+    prefetchCharacterVideos();
+    setSplashDone(true);
+  }
 
   // Wait for session check before rendering routes
   if (loading) {
@@ -30,6 +41,39 @@ function App() {
 
   return (
     <>
+      {/* ── Global Click-to-Start splash — shows every page load ── */}
+      {!splashDone && (
+        <div
+          id="click-to-start"
+          onClick={handleSplashClick}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #0d1a0d 100%)',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', userSelect: 'none',
+          }}
+        >
+          <div style={{ fontSize: '4rem', marginBottom: 16, animation: 'pulse 1.5s ease-in-out infinite' }}>🍌</div>
+          <h1 style={{ color: '#ffe066', fontSize: '2.2rem', fontWeight: 900, marginBottom: 8, letterSpacing: 2 }}>
+            Banana Showdown
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.55)', marginBottom: 40 }}>The ultimate banana battle arena</p>
+          <button
+            style={{
+              background: 'linear-gradient(135deg, #ffe066, #ff9900)',
+              color: '#1a1a1a', border: 'none', borderRadius: 50,
+              padding: '16px 48px', fontSize: '1.15rem', fontWeight: 800,
+              cursor: 'pointer', letterSpacing: 1,
+              boxShadow: '0 0 32px rgba(255,224,102,0.45)',
+              animation: 'pulse 1.5s ease-in-out infinite',
+            }}
+          >
+            🎮 Click to Start
+          </button>
+        </div>
+      )}
+
       <Navbar />
       <Routes>
         {/* Public routes — redirect to /select if already logged in */}
@@ -56,3 +100,4 @@ function App() {
 }
 
 export default App;
+
