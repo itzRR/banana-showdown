@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
-import { playMusic, stopMusic, TRACKS } from '../utils/music';
+import { playMusic, TRACKS } from '../utils/music';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -17,7 +17,6 @@ function LoginPage() {
   // 🎵 Play main menu music (App.jsx calls playMusic on splash click)
   useEffect(() => {
     playMusic(TRACKS.MENU);
-    return () => stopMusic();
   }, []);
 
   // [EVENT HANDLER] — Form submit triggers POST /api/auth/login
