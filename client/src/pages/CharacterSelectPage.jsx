@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { soundSelect, soundClick, soundHover, soundFight } from '../utils/sounds';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
-// 14 playable characters — the real squad
+// 15 playable characters — the real squad
 const CHARACTERS = [
   {
     id: 'rehan',
@@ -167,6 +167,17 @@ const CHARACTERS = [
     basePower: 76,
     characterClass: 'Cyber Duelist',
     description: 'Wired in, locked on. In the digital arena, Thejan never loses a round.'
+  },
+  {
+    id: 'reeha',
+    name: 'Reeha',
+    alias: 'Carrot Guardian',
+    avatar: '🐰',
+    image: '/characters/reeha.webp',
+    video: '/characters/Reeha.mp4',
+    basePower: 69,
+    characterClass: 'Magical Support',
+    description: 'Soft ears, swift feet, carrot in hand. She heals, she speeds, she enchants — cute but unstoppable.'
   }
 ];
 
