@@ -8,8 +8,8 @@
 
 :root {
   --bg-dark: #0a0a0f;
-  --bg-card: rgba(255, 255, 255, 0.04);
-  --bg-card-hover: rgba(255, 255, 255, 0.08);
+  --bg-card: rgba(15, 15, 22, 0.75); /* Less transparent card background */
+  --bg-card-hover: rgba(25, 25, 35, 0.85); /* Less transparent hover state */
   --border: rgba(255, 255, 255, 0.1);
   --border-bright: rgba(255, 220, 50, 0.4);
 
@@ -59,7 +59,7 @@ html, body, #root {
 .bg-video-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 10, 15, 0.82); /* Darker semi-transparent overlay */
+  background: rgba(10, 10, 15, 0.88); /* Even darker semi-transparent overlay */
   z-index: -1;
   pointer-events: none;
 }
