@@ -155,10 +155,10 @@ function GamePage() {
         </div>
 
         {/* VS divider */}
-        <div className="vs-divider card" style={{ fontSize: '1.5rem', flexDirection: 'column', gap: 8 }}>
-          <span>⚡</span>
-          <span style={{ fontSize: '2.5rem', fontWeight: 900 }}>VS</span>
-          <span>⚡</span>
+        <div className="vs-divider card" style={{ flexDirection: 'column', gap: 8 }}>
+          <span className="vs-bolt">⚡</span>
+          <span className="vs-text">VS</span>
+          <span className="vs-bolt">⚡</span>
         </div>
 
         {/* Opponent */}
