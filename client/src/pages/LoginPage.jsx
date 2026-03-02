@@ -9,6 +9,7 @@ import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 import { unlockAudio } from '../utils/sounds';
+import { prefetchCharacterVideos } from '../utils/prefetch';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -34,6 +35,9 @@ function LoginPage() {
     unlockAudio();
     sessionStorage.setItem('bs_audio_unlocked', 'true');
     setAudioUnlocked(true);
+    // 🎬 Start prefetching character videos in the background
+    // So they're (partially) cached by the time user reaches /select
+    prefetchCharacterVideos();
   }
 
   // [EVENT HANDLER] — Form submit triggers POST /api/auth/login
