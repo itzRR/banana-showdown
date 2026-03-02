@@ -129,8 +129,8 @@ function GamePage() {
         <div className="card fighter-panel player-panel">
           {character.image
             ? <img src={character.image} alt={character.name}
-                style={{ width: 90, height: 90, objectFit: 'cover', objectPosition: 'top',
-                         borderRadius: 12, marginBottom: 10, border: '2px solid var(--border-bright)' }} />
+                style={{ width: 130, height: 130, objectFit: 'cover', objectPosition: 'top',
+                         borderRadius: 14, marginBottom: 12, border: '2px solid var(--border-bright)' }} />
             : <span className="fighter-avatar">{character.avatar}</span>
           }
           <div className="fighter-label">Your Fighter</div>
@@ -155,7 +155,7 @@ function GamePage() {
         </div>
 
         {/* VS divider */}
-        <div className="vs-divider card" style={{ flexDirection: 'column', gap: 8 }}>
+        <div className="vs-divider card" style={{ flexDirection: 'column', gap: 8, minWidth: 90, padding: '24px 16px' }}>
           <span className="vs-bolt">⚡</span>
           <span className="vs-text">VS</span>
           <span className="vs-bolt">⚡</span>
@@ -164,8 +164,8 @@ function GamePage() {
         {/* Opponent */}
         <div className="card fighter-panel opponent-panel">
           <img src="/characters/banana boss.webp" alt="Banana Boss"
-              style={{ width: 90, height: 90, objectFit: 'cover', objectPosition: 'top',
-                       borderRadius: 12, marginBottom: 10, border: '2px solid var(--red)' }} />
+              style={{ width: 130, height: 130, objectFit: 'cover', objectPosition: 'top',
+                       borderRadius: 14, marginBottom: 12, border: '2px solid var(--red)' }} />
           <div className="fighter-label">Opponent</div>
           <div className="fighter-name">{OPPONENT.name}</div>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 16 }}>

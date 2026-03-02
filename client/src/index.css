@@ -466,8 +466,9 @@ body {
 /* ---- Game Page ---- */
 .game-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
 }
 @media (max-width: 768px) { .game-layout { grid-template-columns: 1fr; } }
 
