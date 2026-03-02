@@ -18,15 +18,10 @@ function RegisterPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // 🎵 Play main menu music — retry via event when splash is clicked
+  // 🎵 Play main menu music (App.jsx calls playMusic on splash click)
   useEffect(() => {
     playMusic(TRACKS.MENU);
-    const retry = () => playMusic(TRACKS.MENU);
-    window.addEventListener('bs:audioUnlocked', retry);
-    return () => {
-      window.removeEventListener('bs:audioUnlocked', retry);
-      stopMusic();
-    };
+    return () => stopMusic();
   }, []);
 
   // [EVENT HANDLER] — Form submit triggers POST /api/auth/register

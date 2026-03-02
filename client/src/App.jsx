@@ -3,7 +3,7 @@
 //  Defines all routes and wraps protected ones
 // ============================================================
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
@@ -17,18 +17,24 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { unlockAudio } from './utils/sounds';
 import { prefetchCharacterVideos } from './utils/prefetch';
+import { playMusic, TRACKS } from './utils/music';
 
 function App() {
   const { user, loading } = useAuth();
   const [splashDone, setSplashDone] = useState(false);
 
   function handleSplashClick() {
-    // ✅ Inside click handler = inside user gesture = audio.play() allowed
+    // ✅ Everything here runs synchronously inside the user gesture
+    // so HTMLAudioElement.play() is guaranteed to be allowed by the browser.
     unlockAudio();
     prefetchCharacterVideos();
     setSplashDone(true);
-    // Notify all mounted pages so they can retry playMusic
-    window.dispatchEvent(new Event('bs:audioUnlocked'));
+
+    // Play the right track for whatever page is currently showing
+    const path = window.location.pathname;
+    if (path.startsWith('/game'))   playMusic(TRACKS.BATTLE);
+    else if (path.startsWith('/select')) playMusic(TRACKS.CHARACTER);
+    else                             playMusic(TRACKS.MENU);
   }
 
   // Wait for session check before rendering routes

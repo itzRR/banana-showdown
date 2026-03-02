@@ -14,18 +14,10 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  // 🎵 Play main menu music.
-  // First attempt may be blocked if user hasn't clicked splash yet.
-  // 'bs:audioUnlocked' event fires from App.jsx when splash is dismissed,
-  // allowing the retry to succeed inside the same user-gesture tick.
+  // 🎵 Play main menu music (App.jsx calls playMusic on splash click)
   useEffect(() => {
     playMusic(TRACKS.MENU);
-    const retry = () => playMusic(TRACKS.MENU);
-    window.addEventListener('bs:audioUnlocked', retry);
-    return () => {
-      window.removeEventListener('bs:audioUnlocked', retry);
-      stopMusic();
-    };
+    return () => stopMusic();
   }, []);
 
   // [EVENT HANDLER] — Form submit triggers POST /api/auth/login
