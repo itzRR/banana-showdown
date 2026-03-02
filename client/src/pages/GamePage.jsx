@@ -16,26 +16,20 @@ import {
 } from '../utils/sounds';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
-// All available Banana Boss images
-const BOSS_IMAGES = [
-  '/characters/banana boss.webp',
-  '/characters/banana boss2.webp',
-  '/characters/banana boss3.webp',
-  '/characters/banana boss4.webp',
-  '/characters/banana boss5.webp',
+// All available Banana Bosses (image + name pairs)
+const BOSSES = [
+  { image: '/characters/banana boss.webp',  name: 'General Malinda – King of the Arena' },
+  { image: '/characters/banana boss2.webp', name: 'Raj The Ripper' },
+  { image: '/characters/banana boss3.webp', name: 'Overlord Vinura' },
+  { image: '/characters/banana boss4.webp', name: 'Gota the Imperator' },
+  { image: '/characters/banana boss5.webp', name: 'Don Sunil "The Golden Peel"' },
 ];
-
-// Opponent definition
-const OPPONENT = {
-  name: 'Banana Boss',
-  avatar: '🍌',
-  characterClass: 'Boss'
-};
+const BOSS_IMAGES = BOSSES.map(b => b.image);
 
 // ── SlotMachineBoss ────────────────────────────────────────────
 // A true slot-machine reel: images physically scroll upward through a
 // clipped viewport, decelerating step-by-step before locking on the winner.
-function SlotMachineBoss({ onDone }) {
+function SlotMachineBoss({ onDone, onBossSelected }) {
   const IMG_H = 130; // px — matches slot window height
   const onDoneRef = useRef(onDone);
   onDoneRef.current = onDone;
@@ -101,6 +95,8 @@ function SlotMachineBoss({ onDone }) {
     // ── Reveal flash + notify parent ────────────────────────────
     timers.push(setTimeout(() => {
       setRevealed(true);
+      const selectedBoss = BOSSES.find(b => b.image === finalImgRef.current) || BOSSES[0];
+      onBossSelected && onBossSelected(selectedBoss);
       onDoneRef.current && onDoneRef.current();
     }, time + 440));
 
@@ -154,6 +150,7 @@ function GamePage() {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [error, setError] = useState('');
   const [bossReady, setBossReady] = useState(false);
+  const [boss, setBoss] = useState(null);
   const resultRef = useRef(null);
 
   // 🎵 Battle music on mount → Victory on win
@@ -285,11 +282,12 @@ function GamePage() {
         <div className="card fighter-panel opponent-panel">
           <SlotMachineBoss
             onDone={() => setBossReady(true)}
+            onBossSelected={setBoss}
           />
           <div className="fighter-label" style={{ marginTop: 12 }}>Opponent</div>
-          <div className="fighter-name">{OPPONENT.name}</div>
+          <div className="fighter-name">{boss ? boss.name : 'Banana Boss'}</div>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 16 }}>
-            {OPPONENT.characterClass}
+            Boss
           </div>
           <div className="power-bar-wrapper">
             <div className="power-bar-label">
