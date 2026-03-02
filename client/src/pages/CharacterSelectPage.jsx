@@ -175,7 +175,7 @@ const CHARACTERS = [
     avatar: '🐰',
     image: '/characters/reeha.webp',
     video: '/characters/Reeha.mp4',
-    basePower: 69,
+    basePower: 70,
     characterClass: 'Magical Support',
     description: 'Soft ears, swift feet, carrot in hand. She heals, she speeds, she enchants — cute but unstoppable.'
   }
