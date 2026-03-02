@@ -35,32 +35,31 @@
 }
 
 html, body, #root {
-  height: 100%;
-  background: var(--bg-dark);
+  min-height: 100vh;
   color: var(--text-primary);
   font-family: var(--font);
-  min-height: 100vh;
+}
+
+#root {
+  isolation: isolate;
 }
 
 /* ── Full Page Background Video (PC only) ── */
 .bg-video {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  transform: translateX(-50%) translateY(-50%);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: -2;
   object-fit: cover;
-  opacity: 0.8; /* Slight fade so it doesn't overwhelm */
+  opacity: 0.9; /* More visible, controlled via overlay */
 }
 
 .bg-video-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 10, 15, 0.6); /* Dark semi-transparent overlay */
+  background: rgba(10, 10, 15, 0.82); /* Darker semi-transparent overlay */
   z-index: -1;
   pointer-events: none;
 }
@@ -71,6 +70,7 @@ body {
     radial-gradient(ellipse 80% 60% at 20% -10%, rgba(255, 214, 51, 0.12) 0%, transparent 60%),
     radial-gradient(ellipse 60% 50% at 80% 110%, rgba(255, 140, 66, 0.1) 0%, transparent 60%),
     #0a0a0f;
+  background-attachment: fixed;
 }
 
 /* ---- Navbar ---- */
