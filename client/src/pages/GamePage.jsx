@@ -126,7 +126,7 @@ function GamePage() {
       {/* Fighter cards */}
       <div className="game-layout">
         {/* Player */}
-        <div className="card fighter-panel">
+        <div className="card fighter-panel player-panel">
           {character.image
             ? <img src={character.image} alt={character.name}
                 style={{ width: 90, height: 90, objectFit: 'cover', objectPosition: 'top',
@@ -162,7 +162,7 @@ function GamePage() {
         </div>
 
         {/* Opponent */}
-        <div className="card fighter-panel">
+        <div className="card fighter-panel opponent-panel">
           <img src="/characters/banana boss.webp" alt="Banana Boss"
               style={{ width: 90, height: 90, objectFit: 'cover', objectPosition: 'top',
                        borderRadius: 12, marginBottom: 10, border: '2px solid var(--red)' }} />

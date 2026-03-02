@@ -474,6 +474,36 @@ body {
 .fighter-panel {
   text-align: center;
   padding: 32px 24px;
+  animation: fighterFloat 3.5s ease-in-out infinite;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Offset opponent so they bob in opposite phase */
+.fighter-panel.opponent-panel {
+  animation-delay: -1.75s;
+}
+
+/* Player card — yellow aura */
+.fighter-panel.player-panel {
+  box-shadow: 0 0 0 1px rgba(255,214,51,0.08),
+              0 8px 32px rgba(0,0,0,0.4);
+  animation: fighterFloatPlayer 3.5s ease-in-out infinite;
+}
+
+/* Opponent card — red aura */
+.fighter-panel.opponent-panel {
+  box-shadow: 0 0 0 1px rgba(255,71,87,0.08),
+              0 8px 32px rgba(0,0,0,0.4);
+  animation: fighterFloatOpponent 3.5s ease-in-out infinite;
+}
+
+@keyframes fighterFloatPlayer {
+  0%, 100% { transform: translateY(0);    box-shadow: 0 4px 20px rgba(255,214,51,0.08), 0 8px 32px rgba(0,0,0,0.4); }
+  50%       { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(255,214,51,0.22), 0 16px 48px rgba(0,0,0,0.5); }
+}
+@keyframes fighterFloatOpponent {
+  0%, 100% { transform: translateY(0);    box-shadow: 0 4px 20px rgba(255,71,87,0.08), 0 8px 32px rgba(0,0,0,0.4); }
+  50%       { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(255,71,87,0.22), 0 16px 48px rgba(0,0,0,0.5); }
 }
 
 .fighter-avatar { font-size: 5rem; display: block; margin-bottom: 12px; }
