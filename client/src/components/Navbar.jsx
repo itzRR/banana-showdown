@@ -32,7 +32,8 @@ function Navbar() {
     <>
       <nav className="navbar">
         <NavLink to={user ? '/select' : '/login'} className="navbar-brand" onClick={closeMenu}>
-          🍌 Banana <span>Showdown</span>
+          <img src="/favicon-96x96.png" alt="logo" style={{ width: 26, height: 26, borderRadius: 6, marginRight: 8, verticalAlign: 'middle' }} />
+          Banana <span>Showdown</span>
         </NavLink>
 
         {/* Desktop links */}

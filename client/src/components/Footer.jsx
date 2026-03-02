@@ -14,7 +14,7 @@ function Footer() {
       >
         Rehan Bandara
       </a>
-      <span> · 🍌 Banana Showdown</span>
+      <span> · <img src="/favicon-96x96.png" alt="logo" style={{ width: 16, height: 16, borderRadius: 4, verticalAlign: 'middle', marginRight: 4 }} />Banana Showdown</span>
     </footer>
   );
 }
