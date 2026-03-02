@@ -2,12 +2,10 @@
 //  CharacterSelectPage — Pick your fighter
 //  Each character: name, alias, avatar emoji, image, intro video,
 //  base power, class, and description.
-//  To add media: set `image` to an import / URL and `video` to a
-//  video URL. Cards show the image (fallback: emoji) and play the
-//  video on hover.
+//  Clicking a card opens a popup modal with details + Battle button.
 // ============================================================
 
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { soundSelect, soundClick, soundHover, soundFight } from '../utils/sounds';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
@@ -182,8 +180,6 @@ const CHARACTERS = [
 ];
 
 // ── CharacterCard ──────────────────────────────────────────────
-// Shows character image (or emoji fallback). On hover, plays the
-// intro video muted over the thumbnail, then stops on mouse-leave.
 function CharacterCard({ char, isSelected, onSelect }) {
   const videoRef = useRef(null);
 
@@ -250,7 +246,94 @@ function CharacterCard({ char, isSelected, onSelect }) {
             style={{ width: `${char.basePower}%` }}
           />
         </div>
-        <div className="character-description">{char.description}</div>
+      </div>
+    </div>
+  );
+}
+
+// ── CharacterModal ─────────────────────────────────────────────
+function CharacterModal({ char, onClose, onConfirm }) {
+  const videoRef = useRef(null);
+
+  // Play video preview inside modal
+  useEffect(() => {
+    if (videoRef.current && char.video) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+    // Prevent page scroll while modal is open
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, [char]);
+
+  // Close on backdrop click
+  function handleBackdrop(e) {
+    if (e.target === e.currentTarget) onClose();
+  }
+
+  // Close on Escape
+  useEffect(() => {
+    function onKey(e) { if (e.key === 'Escape') onClose(); }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <div className="char-modal-backdrop" onClick={handleBackdrop}>
+      <div className="char-modal" role="dialog" aria-modal="true" aria-label={`${char.name} details`}>
+
+        {/* Close button */}
+        <button className="char-modal-close" onClick={onClose} aria-label="Close">✕</button>
+
+        {/* Left: character visual */}
+        <div className="char-modal-visual">
+          {char.video && (
+            <video
+              ref={videoRef}
+              src={char.video}
+              className="char-modal-video"
+              muted
+              playsInline
+              loop
+            />
+          )}
+          {char.image
+            ? <img src={char.image} alt={char.name} className="char-modal-image" />
+            : <span className="char-modal-avatar">{char.avatar}</span>
+          }
+          {/* Gradient overlay on image */}
+          <div className="char-modal-img-overlay" />
+        </div>
+
+        {/* Right: details + button */}
+        <div className="char-modal-details">
+          <div className="char-modal-alias">{char.alias}</div>
+          <div className="char-modal-name">{char.name}</div>
+          <div className="char-modal-class">🎯 {char.characterClass}</div>
+
+          <p className="char-modal-description">{char.description}</p>
+
+          {/* Power */}
+          <div className="char-modal-power-row">
+            <span>⚡ Power</span>
+            <span className="char-modal-power-num">{char.basePower} <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>/ 100</span></span>
+          </div>
+          <div className="char-modal-power-bar">
+            <div
+              className="char-modal-power-fill"
+              style={{ width: `${char.basePower}%` }}
+            />
+          </div>
+
+          {/* Battle button */}
+          <button
+            id="confirm-character"
+            className="btn btn-primary char-modal-battle-btn"
+            onClick={onConfirm}
+          >
+            {char.avatar} Battle with {char.name} →
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -258,6 +341,7 @@ function CharacterCard({ char, isSelected, onSelect }) {
 
 function CharacterSelectPage() {
   const [selected, setSelected] = useState(null);
+  const [modalChar, setModalChar] = useState(null);
   const navigate = useNavigate();
 
   // Shuffle characters once per page visit (Fisher-Yates)
@@ -276,17 +360,21 @@ function CharacterSelectPage() {
     return () => stopMusic();
   }, []);
 
-  // [EVENT HANDLER] — Character card click stores selection in state
+  // [EVENT HANDLER] — Character card click: set selection AND open modal
   function handleSelect(character) {
-    soundSelect(); // 🔊 selection pop
+    soundSelect();
     setSelected(character);
+    setModalChar(character);
   }
+
+  const handleCloseModal = useCallback(() => {
+    setModalChar(null);
+  }, []);
 
   function handleConfirm() {
     if (!selected) return;
-    soundClick();  // 🔊 confirm click
-    soundFight();  // 🎮 play fight.mp3
-    // Pass selected character via router state to game page
+    soundClick();
+    soundFight();
     navigate('/game', { state: { character: selected } });
   }
 
@@ -308,17 +396,13 @@ function CharacterSelectPage() {
         ))}
       </div>
 
-      {selected && (
-        <div style={{ marginTop: 32, display: 'flex', justifyContent: 'center' }}>
-          <button
-            id="confirm-character"
-            className="btn btn-primary"
-            onClick={handleConfirm}
-            style={{ fontSize: '1.05rem', padding: '14px 40px' }}
-          >
-            {selected.avatar} Battle with {selected.name} →
-          </button>
-        </div>
+      {/* Popup modal — shown when a character is clicked */}
+      {modalChar && (
+        <CharacterModal
+          char={modalChar}
+          onClose={handleCloseModal}
+          onConfirm={handleConfirm}
+        />
       )}
     </div>
   );

@@ -3,6 +3,7 @@
 //  [EVENT-DRIVEN] — Button clicks trigger handleAction event
 //  [API INTEROPERABILITY] — axios.post('/api/game/play') calls backend
 //                           which then calls the Banana API
+//  Boss is revealed via a slot-machine spin animation on page load.
 // ============================================================
 
 import { useState, useEffect, useRef } from 'react';
@@ -31,6 +32,67 @@ const OPPONENT = {
   characterClass: 'Boss'
 };
 
+// ── SlotMachineBoss ────────────────────────────────────────────
+// Shows a rapid cycling animation through boss images before
+// landing on the final randomly selected boss.
+function SlotMachineBoss({ finalImage, onDone }) {
+  const [currentImg, setCurrentImg] = useState(BOSS_IMAGES[0]);
+  const [spinning, setSpinning] = useState(true);
+  const [revealed, setRevealed] = useState(false);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    let tick = 0;
+    // Start fast cycling
+    intervalRef.current = setInterval(() => {
+      tick++;
+      setCurrentImg(BOSS_IMAGES[tick % BOSS_IMAGES.length]);
+    }, 80);
+
+    // Gradually slow down after 1.2s, then stop at 2s
+    const slowTimer = setTimeout(() => {
+      clearInterval(intervalRef.current);
+      let slowTick = 0;
+      const slowInterval = setInterval(() => {
+        slowTick++;
+        setCurrentImg(BOSS_IMAGES[slowTick % BOSS_IMAGES.length]);
+        if (slowTick >= 6) {
+          clearInterval(slowInterval);
+          setCurrentImg(finalImage);
+          setSpinning(false);
+          setTimeout(() => {
+            setRevealed(true);
+            onDone && onDone();
+          }, 200);
+        }
+      }, 180);
+    }, 1200);
+
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(slowTimer);
+    };
+  }, [finalImage, onDone]);
+
+  return (
+    <div className={`slot-boss-wrapper${spinning ? ' spinning' : ''}${revealed ? ' revealed' : ''}`}>
+      <img
+        src={currentImg}
+        alt="Banana Boss"
+        className="slot-boss-img"
+      />
+      {spinning && (
+        <div className="slot-spin-overlay">
+          <span className="slot-spin-text">🎰 Picking Boss…</span>
+        </div>
+      )}
+      {revealed && (
+        <div className="slot-reveal-flash" />
+      )}
+    </div>
+  );
+}
+
 function GamePage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,10 +105,11 @@ function GamePage() {
   const [result, setResult] = useState(null);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [error, setError] = useState('');
+  const [bossReady, setBossReady] = useState(false);
   const resultRef = useRef(null);
 
   // 🎲 Pick a random boss image once per battle session
-  const [bossImage, setBossImage] = useState(
+  const [bossImage] = useState(
     () => BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]
   );
 
@@ -91,9 +154,6 @@ function GamePage() {
     setLoading(true);
     setError('');
     setResult(null);
-
-    // 🎲 Randomize boss image on every new action!
-    setBossImage(BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]);
 
     // 🎵 Switch back to battle music when starting a new round (after victory)
     playMusic(TRACKS.BATTLE);
@@ -178,12 +238,13 @@ function GamePage() {
           <span className="vs-bolt">⚡</span>
         </div>
 
-        {/* Opponent */}
+        {/* Opponent — slot machine reveal */}
         <div className="card fighter-panel opponent-panel">
-          <img src={bossImage} alt="Banana Boss"
-              style={{ width: 130, height: 130, objectFit: 'cover', objectPosition: 'top',
-                       borderRadius: 14, marginBottom: 12, border: '2px solid var(--red)' }} />
-          <div className="fighter-label">Opponent</div>
+          <SlotMachineBoss
+            finalImage={bossImage}
+            onDone={() => setBossReady(true)}
+          />
+          <div className="fighter-label" style={{ marginTop: 12 }}>Opponent</div>
           <div className="fighter-name">{OPPONENT.name}</div>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 16 }}>
             {OPPONENT.characterClass}
@@ -192,7 +253,7 @@ function GamePage() {
             <div className="power-bar-label">
               <span>Power</span>
               <span style={{ color: 'var(--red)', fontWeight: 700 }}>
-                {result ? result.opponentPower : '???'}
+                {result ? result.opponentPower : (bossReady ? '???' : '🎰')}
               </span>
             </div>
             <div className="power-bar-track">
@@ -215,7 +276,7 @@ function GamePage() {
             className="action-btn attack"
             onClick={() => handleAction('attack')}
             onMouseEnter={soundHover}
-            disabled={loading}
+            disabled={loading || !bossReady}
             title="Standard attack — 1x power multiplier"
           >
             <span className="action-icon">⚔️</span>
@@ -229,7 +290,7 @@ function GamePage() {
             className="action-btn random-skill"
             onClick={() => handleAction('randomSkill')}
             onMouseEnter={soundHover}
-            disabled={loading}
+            disabled={loading || !bossReady}
             title="Random skill — 1.25x power multiplier"
           >
             <span className="action-icon">🎲</span>
@@ -243,7 +304,7 @@ function GamePage() {
             className="action-btn banana-power"
             onClick={() => handleAction('bananaPower')}
             onMouseEnter={soundHover}
-            disabled={loading}
+            disabled={loading || !bossReady}
             title="Banana Power ultimate — 1.5x power multiplier"
           >
             <span className="action-icon">🍌</span>
@@ -251,6 +312,11 @@ function GamePage() {
             <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>1.5x power</span>
           </button>
         </div>
+        {!bossReady && (
+          <p style={{ textAlign: 'center', marginTop: 12, color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+            🎰 Waiting for the boss to be revealed…
+          </p>
+        )}
       </div>
 
       {/* ── How It Works panel ─────────────────────────── */}
@@ -377,7 +443,7 @@ function GamePage() {
           </div>
 
           {/* Battle result */}
-          <div className={`result-banner ${result.result}`} id="battle-result">
+          <div className={`result-banner ${result.result}`} id="battle-result" ref={resultRef}>
             <span className="result-emoji">
               {result.result === 'win' ? '🏆' : '💀'}
             </span>

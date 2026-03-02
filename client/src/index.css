@@ -462,6 +462,276 @@ body {
 }
 
 
+/* ---- Character Modal Popup ---- */
+.char-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.char-modal {
+  position: relative;
+  background: rgba(15, 15, 22, 0.97);
+  border: 1px solid var(--border-bright);
+  border-radius: 24px;
+  box-shadow: 0 0 60px rgba(255, 214, 51, 0.2), 0 24px 80px rgba(0,0,0,0.8);
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+  max-width: 740px;
+  width: 100%;
+  animation: modalPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.88) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Close button */
+.char-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.char-modal-close:hover {
+  background: rgba(255,71,87,0.2);
+  color: var(--red);
+  transform: scale(1.1);
+}
+
+/* Left: character visual */
+.char-modal-visual {
+  position: relative;
+  width: 280px;
+  min-height: 380px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.char-modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  min-height: 380px;
+}
+
+.char-modal-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  z-index: 1;
+}
+
+.char-modal-avatar {
+  font-size: 7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 380px;
+}
+
+.char-modal-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 60%, rgba(15,15,22,0.97) 100%);
+  z-index: 2;
+}
+
+/* Right: details */
+.char-modal-details {
+  flex: 1;
+  padding: 36px 32px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+
+.char-modal-alias {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--yellow);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 6px;
+}
+
+.char-modal-name {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.char-modal-class {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+}
+
+.char-modal-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.char-modal-power-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.char-modal-power-num {
+  color: var(--yellow);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.char-modal-power-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.char-modal-power-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--yellow), var(--orange));
+  transition: width 0.6s ease;
+}
+
+.char-modal-battle-btn {
+  width: 100%;
+  font-size: 1.05rem;
+  padding: 14px 24px;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 600px) {
+  .char-modal { flex-direction: column; }
+  .char-modal-visual { width: 100%; min-height: 220px; }
+  .char-modal-image { min-height: 220px; }
+  .char-modal-avatar { min-height: 220px; }
+  .char-modal-img-overlay {
+    background: linear-gradient(to bottom, transparent 60%, rgba(15,15,22,0.97) 100%);
+  }
+  .char-modal-details { padding: 20px 20px 24px; }
+}
+
+/* ---- Slot Machine Boss (Game Page) ---- */
+.slot-boss-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 12px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid var(--red);
+  flex-shrink: 0;
+}
+
+.slot-boss-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: filter 0.15s ease;
+}
+
+.slot-boss-wrapper.spinning .slot-boss-img {
+  filter: blur(1.5px) brightness(0.7);
+}
+
+.slot-spin-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.slot-spin-text {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--yellow);
+  text-align: center;
+  text-shadow: 0 0 8px var(--yellow-glow);
+  animation: slotFlicker 0.15s linear infinite;
+}
+
+@keyframes slotFlicker {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+.slot-reveal-flash {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 214, 51, 0.35);
+  animation: revealFlash 0.5s ease forwards;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes revealFlash {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.slot-boss-wrapper.revealed {
+  border-color: var(--red);
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+  animation: bossRevealPulse 0.4s ease;
+}
+
+@keyframes bossRevealPulse {
+  0%   { transform: scale(0.9); }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
 
 /* ---- Game Page ---- */
 .game-layout {
