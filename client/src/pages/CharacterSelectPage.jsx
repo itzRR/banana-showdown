@@ -380,6 +380,17 @@ function CharacterSelectPage() {
 
   return (
     <div className="page">
+      {/* ── Background video (PC only) ─────────────────── */}
+      <video
+        className="bg-video"
+        src="/characters/Bg.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+      <div className="bg-video-overlay" />
+
       <div className="page-header">
         <h1>⚔️ Choose Your Fighter</h1>
         <p>Select a character to enter the Banana Showdown arena</p>

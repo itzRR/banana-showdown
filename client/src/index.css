@@ -42,6 +42,29 @@ html, body, #root {
   min-height: 100vh;
 }
 
+/* ── Full Page Background Video (PC only) ── */
+.bg-video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: -2;
+  object-fit: cover;
+  opacity: 0.8; /* Slight fade so it doesn't overwhelm */
+}
+
+.bg-video-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.6); /* Dark semi-transparent overlay */
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* Animated gradient background */
 body {
   background:
@@ -1229,6 +1252,12 @@ body {
   .page { padding: 24px 16px; }
   .page-header { margin-bottom: 24px; }
   .page-header h1 { font-size: 1.6rem; }
+  
+  /* Hide background video on mobile */
+  .bg-video,
+  .bg-video-overlay {
+    display: none !important;
+  }
 
   /* Character grid — 2 columns */
   .character-grid {

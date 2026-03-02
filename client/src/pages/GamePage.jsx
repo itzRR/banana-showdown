@@ -235,6 +235,17 @@ function GamePage() {
 
   return (
     <div className="page">
+      {/* ── Background video (PC only) ─────────────────── */}
+      <video
+        className="bg-video"
+        src="/characters/Bg.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+      <div className="bg-video-overlay" />
+
       <div className="page-header">
         <h1>⚔️ Battle Arena</h1>
         <p>Playing as <strong style={{ color: 'var(--yellow)' }}>{character.name}</strong> — Choose your move!</p>
