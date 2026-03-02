@@ -16,27 +16,20 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [audioUnlocked, setAudioUnlocked] = useState(
-    () => sessionStorage.getItem('bs_audio_unlocked') === 'true'
-  );
+  const [audioUnlocked, setAudioUnlocked] = useState(false); // always show splash
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // 🎵 Play main menu music (only after unlock)
-  useEffect(() => {
-    if (audioUnlocked) {
-      playMusic(TRACKS.MENU);
-    }
-    return () => stopMusic();
-  }, [audioUnlocked]);
+  // Cleanup music on unmount
+  useEffect(() => () => stopMusic(), []);
 
   function handleUnlock() {
+    // ✅ Call INSIDE the click handler so browser allows audio.play()
     unlockAudio();
-    sessionStorage.setItem('bs_audio_unlocked', 'true');
+    playMusic(TRACKS.MENU);
     setAudioUnlocked(true);
     // 🎬 Start prefetching character videos in the background
-    // So they're (partially) cached by the time user reaches /select
     prefetchCharacterVideos();
   }
 
