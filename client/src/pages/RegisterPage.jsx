@@ -88,9 +88,7 @@ function RegisterPage() {
           >
             🎮 Click to Start
           </button>
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.78rem', marginTop: 24 }}>
-            Click anywhere to enable music &amp; sounds
-          </p>
+
         </div>
       )}
 
