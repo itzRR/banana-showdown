@@ -33,68 +33,110 @@ const OPPONENT = {
 };
 
 // ── SlotMachineBoss ────────────────────────────────────────────
-// Shows a rapid cycling animation through boss images before
-// landing on the final randomly selected boss.
+// A true slot-machine reel: images physically scroll upward through a
+// clipped viewport, decelerating step-by-step before locking on the winner.
 function SlotMachineBoss({ onDone }) {
-  // Pick the final boss ONCE inside the component so it's truly random every mount
-  const finalImageRef = useRef(BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]);
-  // Start cycling from a random offset so it never visually begins at index 0
-  const startTickRef = useRef(Math.floor(Math.random() * BOSS_IMAGES.length));
+  const IMG_H = 130; // px — matches slot window height
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
-  const [currentImg, setCurrentImg] = useState(BOSS_IMAGES[startTickRef.current]);
-  const [spinning, setSpinning] = useState(true);
+  // Pick the final boss ONCE, randomly
+  const finalImgRef = useRef(BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]);
+
+  // Build the reel strip:  5 repeats × 5 images + the chosen image at the very end
+  // This guarantees we never run out of images while scrolling
+  const reel = [...BOSS_IMAGES, ...BOSS_IMAGES, ...BOSS_IMAGES, ...BOSS_IMAGES, ...BOSS_IMAGES, finalImgRef.current];
+
+  // Random start index (0–4) so the reel never visually begins at the same image
+  const startIdx = useRef(Math.floor(Math.random() * BOSS_IMAGES.length));
+
+  // Scroll position (translateY) and CSS transition duration (ms)
+  const [scrollY,  setScrollY]  = useState(startIdx.current * IMG_H);
+  const [duration, setDuration] = useState(0);
   const [revealed, setRevealed] = useState(false);
-  const intervalRef = useRef(null);
+  const [spinning, setSpinning] = useState(true);
 
   useEffect(() => {
-    let tick = startTickRef.current;
-    // Start fast cycling from a random position
-    intervalRef.current = setInterval(() => {
-      tick++;
-      setCurrentImg(BOSS_IMAGES[tick % BOSS_IMAGES.length]);
-    }, 80);
+    const timers = [];
+    const N = BOSS_IMAGES.length; // 5
+    let idx   = startIdx.current;
+    let time  = 0;
 
-    // Gradually slow down after 1.2s, then land on the chosen boss
-    const slowTimer = setTimeout(() => {
-      clearInterval(intervalRef.current);
-      // Pick a random start for the slow phase too, avoiding index 0 bias
-      let slowTick = Math.floor(Math.random() * BOSS_IMAGES.length);
-      const slowInterval = setInterval(() => {
-        slowTick++;
-        setCurrentImg(BOSS_IMAGES[slowTick % BOSS_IMAGES.length]);
-        if (slowTick % BOSS_IMAGES.length >= BOSS_IMAGES.length - 1 || slowTick > startTickRef.current + 6) {
-          clearInterval(slowInterval);
-          setCurrentImg(finalImageRef.current);
-          setSpinning(false);
-          setTimeout(() => {
-            setRevealed(true);
-            onDone && onDone(finalImageRef.current);
-          }, 200);
-        }
-      }, 180);
-    }, 1200);
+    // ── Fast phase: 15 steps @ 65 ms each ──────────────────────
+    const FAST_STEPS = 15;
+    const FAST_MS    = 65;
+    for (let i = 0; i < FAST_STEPS; i++) {
+      idx++;
+      const y = idx * IMG_H;
+      const delay = time;
+      timers.push(setTimeout(() => {
+        setDuration(FAST_MS - 5);
+        setScrollY(y);
+      }, delay));
+      time += FAST_MS;
+    }
 
-    return () => {
-      clearInterval(intervalRef.current);
-      clearTimeout(slowTimer);
-    };
-  }, [onDone]);
+    // ── Slow phase: 6 steps with increasing gap ─────────────────
+    const slowGaps = [120, 170, 220, 280, 340, 410];
+    for (let i = 0; i < slowGaps.length; i++) {
+      idx++;
+      const y = idx * IMG_H;
+      const gap = slowGaps[i];
+      const delay = time;
+      timers.push(setTimeout(() => {
+        setDuration(gap - 15);
+        setScrollY(y);
+      }, delay));
+      time += gap;
+    }
+
+    // ── Land: snap to the final image with a smooth ease-out ────
+    const finalY = (reel.length - 1) * IMG_H;
+    timers.push(setTimeout(() => {
+      setDuration(420);
+      setScrollY(finalY);
+      setSpinning(false);
+    }, time));
+
+    // ── Reveal flash + notify parent ────────────────────────────
+    timers.push(setTimeout(() => {
+      setRevealed(true);
+      onDoneRef.current && onDoneRef.current();
+    }, time + 440));
+
+    return () => timers.forEach(clearTimeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div className={`slot-boss-wrapper${spinning ? ' spinning' : ''}${revealed ? ' revealed' : ''}`}>
-      <img
-        src={currentImg}
-        alt="Banana Boss"
-        className="slot-boss-img"
-      />
+    <div className={`slot-boss-window${revealed ? ' revealed' : ''}`}>
+      {/* The reel strip — scrolls upward */}
+      <div
+        className="slot-boss-reel"
+        style={{
+          transform: `translateY(-${scrollY}px)`,
+          transition: `transform ${duration}ms linear`,
+        }}
+      >
+        {reel.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt="Boss"
+            className="slot-reel-img"
+          />
+        ))}
+      </div>
+
+      {/* "Picking Boss…" label during spin */}
       {spinning && (
         <div className="slot-spin-overlay">
           <span className="slot-spin-text">🎰 Picking Boss…</span>
         </div>
       )}
-      {revealed && (
-        <div className="slot-reveal-flash" />
-      )}
+
+      {/* Flash on reveal */}
+      {revealed && <div className="slot-reveal-flash" />}
     </div>
   );
 }
