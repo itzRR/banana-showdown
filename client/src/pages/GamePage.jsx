@@ -35,34 +35,40 @@ const OPPONENT = {
 // ── SlotMachineBoss ────────────────────────────────────────────
 // Shows a rapid cycling animation through boss images before
 // landing on the final randomly selected boss.
-function SlotMachineBoss({ finalImage, onDone }) {
-  const [currentImg, setCurrentImg] = useState(BOSS_IMAGES[0]);
+function SlotMachineBoss({ onDone }) {
+  // Pick the final boss ONCE inside the component so it's truly random every mount
+  const finalImageRef = useRef(BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]);
+  // Start cycling from a random offset so it never visually begins at index 0
+  const startTickRef = useRef(Math.floor(Math.random() * BOSS_IMAGES.length));
+
+  const [currentImg, setCurrentImg] = useState(BOSS_IMAGES[startTickRef.current]);
   const [spinning, setSpinning] = useState(true);
   const [revealed, setRevealed] = useState(false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    let tick = 0;
-    // Start fast cycling
+    let tick = startTickRef.current;
+    // Start fast cycling from a random position
     intervalRef.current = setInterval(() => {
       tick++;
       setCurrentImg(BOSS_IMAGES[tick % BOSS_IMAGES.length]);
     }, 80);
 
-    // Gradually slow down after 1.2s, then stop at 2s
+    // Gradually slow down after 1.2s, then land on the chosen boss
     const slowTimer = setTimeout(() => {
       clearInterval(intervalRef.current);
-      let slowTick = 0;
+      // Pick a random start for the slow phase too, avoiding index 0 bias
+      let slowTick = Math.floor(Math.random() * BOSS_IMAGES.length);
       const slowInterval = setInterval(() => {
         slowTick++;
         setCurrentImg(BOSS_IMAGES[slowTick % BOSS_IMAGES.length]);
-        if (slowTick >= 6) {
+        if (slowTick % BOSS_IMAGES.length >= BOSS_IMAGES.length - 1 || slowTick > startTickRef.current + 6) {
           clearInterval(slowInterval);
-          setCurrentImg(finalImage);
+          setCurrentImg(finalImageRef.current);
           setSpinning(false);
           setTimeout(() => {
             setRevealed(true);
-            onDone && onDone();
+            onDone && onDone(finalImageRef.current);
           }, 200);
         }
       }, 180);
@@ -72,7 +78,7 @@ function SlotMachineBoss({ finalImage, onDone }) {
       clearInterval(intervalRef.current);
       clearTimeout(slowTimer);
     };
-  }, [finalImage, onDone]);
+  }, [onDone]);
 
   return (
     <div className={`slot-boss-wrapper${spinning ? ' spinning' : ''}${revealed ? ' revealed' : ''}`}>
@@ -107,11 +113,6 @@ function GamePage() {
   const [error, setError] = useState('');
   const [bossReady, setBossReady] = useState(false);
   const resultRef = useRef(null);
-
-  // 🎲 Pick a random boss image once per battle session
-  const [bossImage] = useState(
-    () => BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]
-  );
 
   // 🎵 Battle music on mount → Victory on win
   useEffect(() => {
@@ -241,7 +242,6 @@ function GamePage() {
         {/* Opponent — slot machine reveal */}
         <div className="card fighter-panel opponent-panel">
           <SlotMachineBoss
-            finalImage={bossImage}
             onDone={() => setBossReady(true)}
           />
           <div className="fighter-label" style={{ marginTop: 12 }}>Opponent</div>
