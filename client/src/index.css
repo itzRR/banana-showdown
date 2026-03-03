@@ -49,11 +49,17 @@ html, body, #root {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 110vw; /* Wider than screen to allow panning */
   height: 100vh;
   z-index: -2;
   object-fit: cover;
-  opacity: 0.9; /* More visible, controlled via overlay */
+  opacity: 0.9;
+  animation: panVideo 45s linear infinite alternate;
+}
+
+@keyframes panVideo {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(-110vw + 100vw)); } /* Pan left to reveal right side */
 }
 
 .bg-video-overlay {
