@@ -28,6 +28,7 @@ const CHARACTER_VIDEOS = [
   '/characters/sandunika.mp4',
   '/characters/nethmi.mp4',
   '/characters/Pasan.mp4',
+  '/characters/Abdur.mp4',
 ];
 
 let prefetchDone = false;

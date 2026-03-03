@@ -209,6 +209,17 @@ const CHARACTERS = [
     basePower: 999,
     characterClass: 'Energy Manipulator',
     description: 'Thinks he’s not from Earth. Cosmic awareness energy. Mysterious, slightly detached. Calm but unpredictable.'
+  },
+  {
+    id: 'abdur',
+    name: 'Abdur',
+    alias: 'Golden Striker',
+    avatar: '⚽',
+    image: '/characters/abdur.webp',
+    video: '/characters/Abdur.mp4',
+    basePower: 85,
+    characterClass: 'High-speed Striker',
+    description: 'Elite football star energy with a confident smile and sharp jawline. High charisma and celebration-ready.'
   }
 ];
 
