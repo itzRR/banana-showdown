@@ -1160,14 +1160,19 @@ body {
 
 /* ---- Footer ---- */
 .app-footer {
-  text-align: center;
-  padding: 20px 24px;
-  margin-top: 60px;
-  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 30px 40px;
+  margin-top: 80px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  background: linear-gradient(to bottom, rgba(10, 10, 15, 0.4) 0%, rgba(5, 5, 8, 0.95) 100%);
+  backdrop-filter: blur(12px);
   color: var(--text-muted);
-  font-size: 0.85rem;
-  background: rgba(10, 10, 15, 0.6);
-  backdrop-filter: blur(8px);
+  font-size: 0.95rem;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25);
+  gap: 12px;
 }
 
 .footer-link {
@@ -1396,8 +1401,39 @@ body {
     opacity: 1;
   }
 }
-. f o o t e r - d i s c l a i m e r - b t n   {   b a c k g r o u n d :   n o n e ;   b o r d e r :   n o n e ;   c o l o r :   v a r ( - - y e l l o w ) ;   t e x t - d e c o r a t i o n :   u n d e r l i n e ;   c u r s o r :   p o i n t e r ;   f o n t - s i z e :   0 . 9 r e m ;   f o n t - f a m i l y :   v a r ( - - f o n t ) ;   } 
- . f o o t e r - d i s c l a i m e r - b t n : h o v e r   {   c o l o r :   # f f f ;   } 
- . d i s c l a i m e r - m o d a l   {   w i d t h :   5 0 0 p x ;   p a d d i n g :   3 0 p x ;   d i s p l a y :   b l o c k ;   t e x t - a l i g n :   l e f t ;   } 
- . d i s c l a i m e r - c o n t e n t   {   w i d t h :   1 0 0 % ;   d i s p l a y :   f l e x ;   f l e x - d i r e c t i o n :   c o l u m n ;   a l i g n - i t e m s :   f l e x - s t a r t ;   }  
- 
+
+/* ---- Footer Disclaimer Modal & Button ---- */
+.footer-disclaimer-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-left: 4px;
+}
+
+.footer-disclaimer-btn:hover {
+  color: var(--yellow);
+  border-color: var(--yellow);
+  background: rgba(255, 214, 51, 0.08);
+  box-shadow: 0 0 12px var(--yellow-glow);
+  transform: translateY(-2px);
+}
+
+.disclaimer-modal {
+  width: 540px;
+  padding: 36px;
+  display: block;
+  text-align: left;
+}
+
+.disclaimer-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
