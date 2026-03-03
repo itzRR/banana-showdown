@@ -205,7 +205,7 @@ const CHARACTERS = [
     alias: 'Voidwalker',
     avatar: '👽',
     image: '/characters/pasan.webp',
-    video: '/characters/pasan.mp4',
+    video: '/characters/Pasan.mp4',
     basePower: 999,
     characterClass: 'Energy Manipulator',
     description: 'Thinks he’s not from Earth. Cosmic awareness energy. Mysterious, slightly detached. Calm but unpredictable.'

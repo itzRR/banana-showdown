@@ -27,7 +27,7 @@ const CHARACTER_VIDEOS = [
   '/characters/Reeha.mp4',
   '/characters/sandunika.mp4',
   '/characters/nethmi.mp4',
-  '/characters/pasan.mp4',
+  '/characters/Pasan.mp4',
 ];
 
 let prefetchDone = false;
