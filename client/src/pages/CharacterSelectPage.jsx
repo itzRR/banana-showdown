@@ -52,7 +52,7 @@ const CHARACTERS = [
     avatar: '🪖',
     image: '/characters/sithum.webp',
     video: '/characters/sithum.mp4',
-    basePower: 75,
+    basePower: 72,
     characterClass: 'Tactical Defender',
     description: 'Stylized military jacket, soft expression. Tough outside, heart of gold.'
   },
@@ -129,7 +129,7 @@ const CHARACTERS = [
     avatar: '😎',
     image: '/characters/bathiya.webp',
     video: '/characters/bathiya.mp4',
-    basePower: 72,
+    basePower: 75,
     characterClass: 'Calm Damage',
     description: 'Relaxed stance, sunset behind him. Cool head, calculated strikes.'
   },
