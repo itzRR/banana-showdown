@@ -109,7 +109,7 @@ const CHARACTERS = [
     video: '/characters/frank.mp4',
     basePower: 80,
     characterClass: 'Heavy Tank',
-    description: 'Cartoon-style mountain of muscle. Built different. Hits different.'
+    description: 'Mountain of muscle. Built different. Hits different.'
   },
   {
     id: 'oshadi',
