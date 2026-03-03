@@ -176,6 +176,28 @@ const CHARACTERS = [
     basePower: 70,
     characterClass: 'Magical Support',
     description: 'Soft ears, swift feet, carrot in hand. She heals, she speeds, she enchants — cute but unstoppable.'
+  },
+  {
+    id: 'sandunika',
+    name: 'Sandunika',
+    alias: 'Crimson Chaos',
+    avatar: '🃏',
+    image: '/characters/sandunika.webp',
+    video: '/characters/sandunika.mp4',
+    basePower: 82,
+    characterClass: 'Chaos Striker',
+    description: 'Harley Quinn energy, slightly crazy but confident. A sports lover and high-speed unpredictable attacker.'
+  },
+  {
+    id: 'nethmi',
+    name: 'Nethmi',
+    alias: 'Silent Bloom',
+    avatar: '🌙',
+    image: '/characters/nethmi.webp',
+    video: '/characters/nethmi.mp4',
+    basePower: 74,
+    characterClass: 'Balanced Mage',
+    description: 'Quiet, calm, and friendly. Soft but strong energy. Underestimated, but packing a powerful special ability.'
   }
 ];
 
