@@ -184,7 +184,7 @@ const CHARACTERS = [
     avatar: '🃏',
     image: '/characters/sandunika.webp',
     video: '/characters/sandunika.mp4',
-    basePower: 82,
+    basePower: 75,
     characterClass: 'Chaos Striker',
     description: 'Harley Quinn energy, slightly crazy but confident. A sports lover and high-speed unpredictable attacker.'
   },
