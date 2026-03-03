@@ -217,7 +217,7 @@ const CHARACTERS = [
     avatar: '⚽',
     image: '/characters/abdur.webp',
     video: '/characters/Abdur.mp4',
-    basePower: 85,
+    basePower: 79,
     characterClass: 'High-speed Striker',
     description: 'Elite football star energy with a confident smile and sharp jawline. High charisma and celebration-ready.'
   }
