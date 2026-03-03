@@ -54,12 +54,13 @@ html, body, #root {
   z-index: -2;
   object-fit: cover;
   opacity: 0.9;
-  animation: panVideo 45s linear infinite alternate;
+  animation: panVideo 60s ease-in-out infinite;
 }
 
 @keyframes panVideo {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(calc(-110vw + 100vw)); } /* Pan left to reveal right side */
+  50%  { transform: translateX(calc(-110vw + 100vw)); } /* Pan fully to the left */
+  100% { transform: translateX(0); } /* Smoothly pan back to the right */
 }
 
 .bg-video-overlay {
