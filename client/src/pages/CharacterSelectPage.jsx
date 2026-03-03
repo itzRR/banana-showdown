@@ -162,7 +162,7 @@ const CHARACTERS = [
     avatar: '⚡',
     image: '/characters/thejan.webp',
     video: '/characters/thejan.mp4',
-    basePower: 76,
+    basePower: 69,
     characterClass: 'Cyber Duelist',
     description: 'Wired in, locked on. In the digital arena, Thejan never loses a round.'
   },
