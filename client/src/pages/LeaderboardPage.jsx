@@ -62,42 +62,44 @@ function LeaderboardPage() {
         )}
 
         {!loading && entries.length > 0 && (
-          <table className="leaderboard-table" id="leaderboard-table">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Character</th>
-                <th className="lb-games-col">Move Used</th>
-                <th>Score</th>
-                <th>Result</th>
-                <th className="lb-games-col">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map((entry, i) => (
-                <tr key={entry.id} id={`lb-row-${i}`}>
-                  <td>
-                    <span className={`leaderboard-rank ${rankClass(i)}`}>
-                      {rankEmoji(i)}
-                    </span>
-                  </td>
-                  <td><span className="lb-username">{entry.username}</span></td>
-                  <td>{entry.character}</td>
-                  <td className="lb-games-col">{actionLabel(entry.action)}</td>
-                  <td><span className="lb-score">{entry.score}</span></td>
-                  <td>
-                    <span className={`lb-badge ${entry.result}`}>
-                      {entry.result === 'win' ? '✓ Win' : '✗ Loss'}
-                    </span>
-                  </td>
-                  <td className="lb-games-col" style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                    {new Date(entry.playedAt).toLocaleDateString()}
-                  </td>
+          <div className="table-responsive" style={{ overflowX: 'auto', width: '100%' }}>
+            <table className="leaderboard-table" id="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Player</th>
+                  <th>Character</th>
+                  <th className="lb-games-col">Move Used</th>
+                  <th>Score</th>
+                  <th>Result</th>
+                  <th className="lb-games-col">Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {entries.map((entry, i) => (
+                  <tr key={entry.id} id={`lb-row-${i}`}>
+                    <td>
+                      <span className={`leaderboard-rank ${rankClass(i)}`}>
+                        {rankEmoji(i)}
+                      </span>
+                    </td>
+                    <td><span className="lb-username">{entry.username}</span></td>
+                    <td>{entry.character}</td>
+                    <td className="lb-games-col">{actionLabel(entry.action)}</td>
+                    <td><span className="lb-score">{entry.score}</span></td>
+                    <td>
+                      <span className={`lb-badge ${entry.result}`}>
+                        {entry.result === 'win' ? '✓ Win' : '✗ Loss'}
+                      </span>
+                    </td>
+                    <td className="lb-games-col" style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                      {new Date(entry.playedAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

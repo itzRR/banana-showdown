@@ -18,11 +18,11 @@ import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
 // All available Banana Bosses (image + name pairs)
 const BOSSES = [
-  { image: '/characters/banana boss.webp',  name: 'General Malinda – King of the Arena' },
-  { image: '/characters/banana boss2.webp', name: 'Raj The Ripper' },
-  { image: '/characters/banana boss3.webp', name: 'Overlord Vinura' },
-  { image: '/characters/banana boss4.webp', name: 'Gota the Imperator' },
-  { image: '/characters/banana boss5.webp', name: 'Don Sunil "The Golden Peel"' },
+  { image: '/characters/banana%20boss.webp',  name: 'General Malinda – King of the Arena' },
+  { image: '/characters/banana%20boss2.webp', name: 'Raj The Ripper' },
+  { image: '/characters/banana%20boss3.webp', name: 'Overlord Vinura' },
+  { image: '/characters/banana%20boss4.webp', name: 'Gota the Imperator' },
+  { image: '/characters/banana%20boss5.webp', name: 'Don Sunil "The Golden Peel"' },
 ];
 const BOSS_IMAGES = BOSSES.map(b => b.image);
 

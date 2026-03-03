@@ -14,6 +14,9 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  const navigate = useNavigate();
+  const { login } = useAuth();
   // 🎵 Play main menu music (App.jsx calls playMusic on splash click)
   useEffect(() => {
     playMusic(TRACKS.MENU);
