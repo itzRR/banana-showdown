@@ -198,6 +198,17 @@ const CHARACTERS = [
     basePower: 74,
     characterClass: 'Balanced Mage',
     description: 'Quiet, calm, and friendly. Soft but strong energy. Underestimated, but packing a powerful special ability.'
+  },
+  {
+    id: 'pasan',
+    name: 'Pasan',
+    alias: 'Voidwalker',
+    avatar: '👽',
+    image: '/characters/pasan.webp',
+    video: '/characters/pasan.mp4',
+    basePower: 999,
+    characterClass: 'Energy Manipulator',
+    description: 'Thinks he’s not from Earth. Cosmic awareness energy. Mysterious, slightly detached. Calm but unpredictable.'
   }
 ];
 
@@ -259,13 +270,13 @@ function CharacterCard({ char, isSelected, onSelect }) {
         <div className="character-alias">{char.alias}</div>
         <div className="character-class">{char.characterClass}</div>
         <div className="character-power">
-          ⚡ {char.basePower}
-          <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>&nbsp;/ 100</span>
+          ⚡ {char.id === 'pasan' ? '???' : char.basePower}
+          {char.id !== 'pasan' && <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>&nbsp;/ 100</span>}
         </div>
         <div className="character-power-bar">
           <div
             className="character-power-bar-fill"
-            style={{ width: `${char.basePower}%` }}
+            style={{ width: char.id === 'pasan' ? '100%' : `${char.basePower}%`, backgroundColor: char.id === 'pasan' ? '#9d4edd' : '' }}
           />
         </div>
       </div>
@@ -338,12 +349,12 @@ function CharacterModal({ char, onClose, onConfirm }) {
           {/* Power */}
           <div className="char-modal-power-row">
             <span>⚡ Power</span>
-            <span className="char-modal-power-num">{char.basePower} <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>/ 100</span></span>
+            <span className="char-modal-power-num">{char.basePower} <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>/ {char.id === 'pasan' ? '999' : '100'}</span></span>
           </div>
           <div className="char-modal-power-bar">
             <div
               className="char-modal-power-fill"
-              style={{ width: `${char.basePower}%` }}
+              style={{ width: char.id === 'pasan' ? '100%' : `${char.basePower}%`, backgroundColor: char.id === 'pasan' ? '#9d4edd' : '' }}
             />
           </div>
 
