@@ -1,7 +1,7 @@
 // ============================================================
 //  Game Controller — Battle logic (energy-based, no Banana API)
 //  Formula: playerPower = floor(basePower × multiplier)  [no lucky bonus]
-//  Opponent: random(0, 2×playerPower) → exactly 50/50 win rate
+//  Opponent: playerPower × (0.5 + random)  → range 50%–150% of player, 50/50 win rate
 //  Higher cost = bigger multiplier = bigger score when you win
 // ============================================================
 
@@ -28,8 +28,9 @@ async function play(req, res) {
   try {
     // Player power — deterministic, no lucky bonus
     const playerPower   = Math.floor(character.basePower * multiplier);
-    // Opponent — calibrated for exactly 50/50 win rate
-    const opponentPower = Math.floor(Math.random() * playerPower * 2);
+    // Opponent — always 50%–150% of player power, still exactly 50/50 win rate
+    // P(win) = P(0.5 + random < 1) = P(random < 0.5) = 0.5
+    const opponentPower = Math.floor(playerPower * (0.5 + Math.random()));
 
     const playerWins = playerPower > opponentPower;
     const score = playerWins ? playerPower : 0;
