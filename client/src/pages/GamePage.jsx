@@ -1,15 +1,15 @@
 // ============================================================
-//  GamePage — Core gameplay: action buttons → Banana API → result
-//  [EVENT-DRIVEN] — Button clicks trigger handleAction event
-//  [API INTEROPERABILITY] — axios.post('/api/game/play') calls backend
-//                           which then calls the Banana API
-//  Boss is revealed via a slot-machine spin animation on page load.
+//  GamePage — The Arena: energy-based battle
+//  ⚡ Energy costs: Attack=5  Random Skill=10  Banana Power=15
+//  Power formula: Math.floor(basePower * multiplier) + random(0-50)
+//  No Banana puzzle shown here — that's Banana Trials (/puzzle)
 // ============================================================
 
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { useEnergy } from '../context/EnergyContext';
 import {
   soundAttack, soundRandomSkill, soundBananaPower,
   soundOracle, soundWin, soundLose, soundClick, soundHover
@@ -26,25 +26,32 @@ const BOSSES = [
 ];
 const BOSS_IMAGES = BOSSES.map(b => b.image);
 
+// Energy costs per action
+const ENERGY_COSTS = {
+  attack:      5,
+  randomSkill: 10,
+  bananaPower: 15,
+};
+
+// Creative low-energy popup messages matching the game's lore
+const LOW_ENERGY_MSGS = [
+  { title: "⚡ Your spark dims, warrior!", body: "The Arena hungers for energy. Return to the Banana Trials to recharge your fury!" },
+  { title: "⚡ Lightning fading fast…", body: "Your power flickers like a dying storm. Seek the Trials — the bananas hold your charge!" },
+  { title: "⚡ Not enough voltage!", body: "This move demands more than your feeble current. Charge up in Banana Trials, then return!" },
+  { title: "⚡ The Peels mock you.", body: "Even the boss laughs at your drained state. Solve the Oracle's puzzles and come back stronger!" },
+  { title: "⚡ Insufficient energy!", body: "The Arena's gates stay shut to the powerless. Fuel your ⚡ in Banana Trials first!" },
+];
+
 // ── SlotMachineBoss ────────────────────────────────────────────
-// A true slot-machine reel: images physically scroll upward through a
-// clipped viewport, decelerating step-by-step before locking on the winner.
 function SlotMachineBoss({ onDone, onBossSelected }) {
-  const IMG_H = 130; // px — matches slot window height
+  const IMG_H = 130;
   const onDoneRef = useRef(onDone);
   onDoneRef.current = onDone;
 
-  // Pick the final boss ONCE, randomly
   const finalImgRef = useRef(BOSS_IMAGES[Math.floor(Math.random() * BOSS_IMAGES.length)]);
-
-  // Build the reel strip:  5 repeats × 5 images + the chosen image at the very end
-  // This guarantees we never run out of images while scrolling
   const reel = [...BOSS_IMAGES, ...BOSS_IMAGES, ...BOSS_IMAGES, ...BOSS_IMAGES, ...BOSS_IMAGES, finalImgRef.current];
-
-  // Random start index (0–4) so the reel never visually begins at the same image
   const startIdx = useRef(Math.floor(Math.random() * BOSS_IMAGES.length));
 
-  // Scroll position (translateY) and CSS transition duration (ms)
   const [scrollY,  setScrollY]  = useState(startIdx.current * IMG_H);
   const [duration, setDuration] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -52,47 +59,32 @@ function SlotMachineBoss({ onDone, onBossSelected }) {
 
   useEffect(() => {
     const timers = [];
-    const N = BOSS_IMAGES.length; // 5
-    let idx   = startIdx.current;
-    let time  = 0;
+    let idx  = startIdx.current;
+    let time = 0;
 
-    // ── Fast phase: 15 steps @ 65 ms each ──────────────────────
     const FAST_STEPS = 15;
     const FAST_MS    = 65;
     for (let i = 0; i < FAST_STEPS; i++) {
       idx++;
       const y = idx * IMG_H;
       const delay = time;
-      timers.push(setTimeout(() => {
-        setDuration(FAST_MS - 5);
-        setScrollY(y);
-      }, delay));
+      timers.push(setTimeout(() => { setDuration(FAST_MS - 5); setScrollY(y); }, delay));
       time += FAST_MS;
     }
 
-    // ── Slow phase: 6 steps with increasing gap ─────────────────
     const slowGaps = [120, 170, 220, 280, 340, 410];
     for (let i = 0; i < slowGaps.length; i++) {
       idx++;
       const y = idx * IMG_H;
       const gap = slowGaps[i];
       const delay = time;
-      timers.push(setTimeout(() => {
-        setDuration(gap - 15);
-        setScrollY(y);
-      }, delay));
+      timers.push(setTimeout(() => { setDuration(gap - 15); setScrollY(y); }, delay));
       time += gap;
     }
 
-    // ── Land: snap to the final image with a smooth ease-out ────
     const finalY = (reel.length - 1) * IMG_H;
-    timers.push(setTimeout(() => {
-      setDuration(420);
-      setScrollY(finalY);
-      setSpinning(false);
-    }, time));
+    timers.push(setTimeout(() => { setDuration(420); setScrollY(finalY); setSpinning(false); }, time));
 
-    // ── Reveal flash + notify parent ────────────────────────────
     timers.push(setTimeout(() => {
       setRevealed(true);
       const selectedBoss = BOSSES.find(b => b.image === finalImgRef.current) || BOSSES[0];
@@ -106,51 +98,61 @@ function SlotMachineBoss({ onDone, onBossSelected }) {
 
   return (
     <div className={`slot-boss-window${revealed ? ' revealed' : ''}`}>
-      {/* The reel strip — scrolls upward */}
       <div
         className="slot-boss-reel"
-        style={{
-          transform: `translateY(-${scrollY}px)`,
-          transition: `transform ${duration}ms linear`,
-        }}
+        style={{ transform: `translateY(-${scrollY}px)`, transition: `transform ${duration}ms linear` }}
       >
         {reel.map((src, i) => (
-          <img
-            key={i}
-            src={src}
-            alt="Boss"
-            className="slot-reel-img"
-          />
+          <img key={i} src={src} alt="Boss" className="slot-reel-img" />
         ))}
       </div>
-
-      {/* "Picking Boss…" label during spin */}
       {spinning && (
         <div className="slot-spin-overlay">
           <span className="slot-spin-text">🎰 Picking Boss…</span>
         </div>
       )}
-
-      {/* Flash on reveal */}
       {revealed && <div className="slot-reveal-flash" />}
+    </div>
+  );
+}
+
+// ── LowEnergyPopup ─────────────────────────────────────────────
+function LowEnergyPopup({ msg, onClose, onGoToTrials }) {
+  return (
+    <div className="low-energy-overlay" onClick={onClose}>
+      <div className="low-energy-popup" onClick={e => e.stopPropagation()}>
+        <div className="low-energy-bolt">⚡</div>
+        <div className="low-energy-title">{msg.title}</div>
+        <div className="low-energy-body">{msg.body}</div>
+        <div className="low-energy-actions">
+          <button className="btn btn-primary" onClick={onGoToTrials} id="go-to-trials-btn">
+            🧩 Go to Banana Trials
+          </button>
+          <button className="btn btn-secondary" onClick={onClose} id="close-energy-popup-btn">
+            Stay Here
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
 
 function GamePage() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { user } = useAuth();
+  const navigate  = useNavigate();
+  const { user }  = useAuth();
+  const { energy, maxEnergy, spendEnergy, canAfford } = useEnergy();
 
-  // Character passed from CharacterSelectPage via router state
   const character = location.state?.character;
 
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [loading, setLoading]           = useState(false);
+  const [result, setResult]             = useState(null);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
-  const [error, setError] = useState('');
-  const [bossReady, setBossReady] = useState(false);
-  const [boss, setBoss] = useState(null);
+  const [error, setError]               = useState('');
+  const [bossReady, setBossReady]       = useState(false);
+  const [boss, setBoss]                 = useState(null);
+  const [energyAnim, setEnergyAnim]     = useState(null); // 'gain' | 'drain'
+  const [lowEnergyMsg, setLowEnergyMsg] = useState(null); // popup msg or null
   const resultRef = useRef(null);
 
   // 🎵 Battle music on mount → Victory on win
@@ -165,7 +167,6 @@ function GamePage() {
     }
   }, [result]);
 
-  // Auto-scroll to result banner when it appears
   useEffect(() => {
     if (result && resultRef.current) {
       setTimeout(() => {
@@ -174,7 +175,6 @@ function GamePage() {
     }
   }, [result]);
 
-  // Redirect to select if no character chosen
   if (!character) {
     return (
       <div className="page" style={{ textAlign: 'center', paddingTop: 80 }}>
@@ -186,19 +186,29 @@ function GamePage() {
     );
   }
 
+  // Energy bar
+  const energyPct   = Math.round((energy / maxEnergy) * 100);
+  const energyColor = energy >= 60 ? 'var(--yellow)' : energy >= 25 ? 'var(--orange)' : 'var(--red)';
+
   // -------------------------------------------------------
-  // [EVENT HANDLER] — Triggered by Attack / Random Skill / Banana Power buttons
-  // Sends action to backend → backend calls Banana API → returns result
+  // [EVENT HANDLER] — Attack / Random Skill / Banana Power
   // -------------------------------------------------------
   async function handleAction(action) {
+    const cost = ENERGY_COSTS[action];
+
+    // Check energy — show lore popup if too low
+    if (!canAfford(cost)) {
+      const msg = LOW_ENERGY_MSGS[Math.floor(Math.random() * LOW_ENERGY_MSGS.length)];
+      setLowEnergyMsg(msg);
+      return;
+    }
+
     setLoading(true);
     setError('');
     setResult(null);
 
-    // 🎵 Switch back to battle music when starting a new round (after victory)
     playMusic(TRACKS.BATTLE);
 
-    // 🔊 Play immediate action sound on button press
     if (action === 'attack')       soundAttack();
     if (action === 'randomSkill')  soundRandomSkill();
     if (action === 'bananaPower')  soundBananaPower();
@@ -210,6 +220,11 @@ function GamePage() {
         '/api/game/play',
         { character: { name: character.name, basePower: character.basePower }, action }
       );
+
+      // Spend energy on success
+      spendEnergy(cost);
+      setEnergyAnim('drain');
+      setTimeout(() => setEnergyAnim(null), 900);
 
       setResult(res.data);
 
@@ -235,19 +250,33 @@ function GamePage() {
 
   return (
     <div className="page">
-      {/* ── Background video (PC only) ─────────────────── */}
-      <video
-        className="bg-video"
-        src="/characters/Bg.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+      {/* Background video */}
+      <video className="bg-video" src="/characters/Bg.mp4" autoPlay muted loop playsInline />
       <div className="bg-video-overlay" />
 
+      {/* ── Energy bar ─────────────────────────────────── */}
+      <div className={`energy-bar-panel${energyAnim ? ` energy-${energyAnim}` : ''}`}>
+        <div className="energy-bar-header">
+          <span className="energy-bar-label">⚡ Battle Energy</span>
+          <span className="energy-bar-value" style={{ color: energyColor }}>
+            {energy} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>/ {maxEnergy}</span>
+          </span>
+        </div>
+        <div className="energy-bar-track">
+          <div
+            className="energy-bar-fill"
+            style={{ width: `${energyPct}%`, background: `linear-gradient(90deg, ${energyColor}, var(--yellow))` }}
+          />
+        </div>
+        {energy < 15 && (
+          <div className="energy-bar-hint" style={{ color: 'var(--red)' }}>
+            ⚠️ Critical energy! Go to Banana Trials to recharge.
+          </div>
+        )}
+      </div>
+
       <div className="page-header">
-        <h1>⚔️ Battle Arena</h1>
+        <h1>⚔️ The Arena</h1>
         <p>Playing as <strong style={{ color: 'var(--yellow)' }}>{character.name}</strong> — Choose your move!</p>
       </div>
 
@@ -274,10 +303,7 @@ function GamePage() {
               </span>
             </div>
             <div className="power-bar-track">
-              <div
-                className="power-bar-fill player"
-                style={{ width: `${playerBarWidth}%` }}
-              />
+              <div className="power-bar-fill player" style={{ width: `${playerBarWidth}%` }} />
             </div>
           </div>
         </div>
@@ -291,15 +317,10 @@ function GamePage() {
 
         {/* Opponent — slot machine reveal */}
         <div className="card fighter-panel opponent-panel">
-          <SlotMachineBoss
-            onDone={() => setBossReady(true)}
-            onBossSelected={setBoss}
-          />
+          <SlotMachineBoss onDone={() => setBossReady(true)} onBossSelected={setBoss} />
           <div className="fighter-label" style={{ marginTop: 12 }}>Opponent</div>
           <div className="fighter-name">{boss ? boss.name : 'Banana Boss'}</div>
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 16 }}>
-            Boss
-          </div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 16 }}>Boss</div>
           <div className="power-bar-wrapper">
             <div className="power-bar-label">
               <span>Power</span>
@@ -308,10 +329,7 @@ function GamePage() {
               </span>
             </div>
             <div className="power-bar-track">
-              <div
-                className="power-bar-fill opponent"
-                style={{ width: `${opponentBarWidth}%` }}
-              />
+              <div className="power-bar-fill opponent" style={{ width: `${opponentBarWidth}%` }} />
             </div>
           </div>
         </div>
@@ -321,46 +339,46 @@ function GamePage() {
       <div className="card action-panel" style={{ marginTop: 24 }}>
         <h3>Choose Your Move</h3>
         <div className="action-buttons">
-          {/* [EVENT] Attack button */}
+          {/* Attack */}
           <button
             id="btn-attack"
-            className="action-btn attack"
+            className={`action-btn attack${!canAfford(ENERGY_COSTS.attack) ? ' btn-energy-low' : ''}`}
             onClick={() => handleAction('attack')}
             onMouseEnter={soundHover}
             disabled={loading || !bossReady}
-            title="Standard attack — 1x power multiplier"
+            title={`Standard attack — costs ${ENERGY_COSTS.attack}⚡`}
           >
             <span className="action-icon">⚔️</span>
             <span>Attack</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>1x power</span>
+            <span className="action-energy-cost">⚡{ENERGY_COSTS.attack}</span>
           </button>
 
-          {/* [EVENT] Random Skill button */}
+          {/* Random Skill */}
           <button
             id="btn-random-skill"
-            className="action-btn random-skill"
+            className={`action-btn random-skill${!canAfford(ENERGY_COSTS.randomSkill) ? ' btn-energy-low' : ''}`}
             onClick={() => handleAction('randomSkill')}
             onMouseEnter={soundHover}
             disabled={loading || !bossReady}
-            title="Random skill — 1.25x power multiplier"
+            title={`Random skill — costs ${ENERGY_COSTS.randomSkill}⚡`}
           >
             <span className="action-icon">🎲</span>
             <span>Random Skill</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>1.25x power</span>
+            <span className="action-energy-cost">⚡{ENERGY_COSTS.randomSkill}</span>
           </button>
 
-          {/* [EVENT] Banana Power — ultimate move */}
+          {/* Banana Power */}
           <button
             id="btn-banana-power"
-            className="action-btn banana-power"
+            className={`action-btn banana-power${!canAfford(ENERGY_COSTS.bananaPower) ? ' btn-energy-low' : ''}`}
             onClick={() => handleAction('bananaPower')}
             onMouseEnter={soundHover}
             disabled={loading || !bossReady}
-            title="Banana Power ultimate — 1.5x power multiplier"
+            title={`Banana Power ultimate — costs ${ENERGY_COSTS.bananaPower}⚡`}
           >
             <span className="action-icon">🍌</span>
             <span>Banana Power</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>1.5x power</span>
+            <span className="action-energy-cost">⚡{ENERGY_COSTS.bananaPower}</span>
           </button>
         </div>
         {!bossReady && (
@@ -370,7 +388,7 @@ function GamePage() {
         )}
       </div>
 
-      {/* ── How It Works panel ─────────────────────────── */}
+      {/* How It Works */}
       <div className="how-it-works-wrap" style={{ marginTop: 16 }}>
         <button
           className="how-it-works-toggle"
@@ -382,52 +400,36 @@ function GamePage() {
 
         {showHowItWorks && (
           <div className="how-it-works-panel">
-            <h3 style={{ marginBottom: 16, color: 'var(--yellow)' }}>🍌 How the Battle Works</h3>
-
+            <h3 style={{ marginBottom: 16, color: 'var(--yellow)' }}>⚔️ How The Arena Works</h3>
             <div className="hiw-steps">
-              {/* Step 1 */}
               <div className="hiw-step">
                 <div className="hiw-step-num">1</div>
                 <div>
-                  <strong>Pick your move</strong>
-                  <p>Each move has a different power multiplier:</p>
-                  <div className="hiw-moves">
-                    <span>⚔️ Attack &nbsp;<b>×1.0</b></span>
-                    <span>🎲 Random Skill &nbsp;<b>×1.25</b></span>
-                    <span>🍌 Banana Power &nbsp;<b>×1.5</b></span>
-                  </div>
+                  <strong>Earn energy in Banana Trials 🧩</strong>
+                  <p>Solve the Oracle's puzzle to gain ⚡ energy. You need energy to attack!</p>
                 </div>
               </div>
-
-              {/* Step 2 */}
               <div className="hiw-step">
                 <div className="hiw-step-num">2</div>
                 <div>
-                  <strong>The Banana Puzzle gives a secret number</strong>
-                  <p>
-                    The 🍌 Banana API sends a random math puzzle image.
-                    The <em>answer</em> to that puzzle is a number from <b>0 to 9</b> — this is your <b>luck modifier</b>.
-                    Higher = better!
-                  </p>
+                  <strong>Pick your move</strong>
+                  <p>Each move costs energy and has a different power multiplier:</p>
+                  <div className="hiw-moves">
+                    <span>⚔️ Attack &nbsp;<b>×1.0</b> &nbsp;— 5⚡</span>
+                    <span>🎲 Random Skill &nbsp;<b>×1.25</b> &nbsp;— 10⚡</span>
+                    <span>🍌 Banana Power &nbsp;<b>×1.5</b> &nbsp;— 15⚡</span>
+                  </div>
                 </div>
               </div>
-
-              {/* Step 3 */}
               <div className="hiw-step">
                 <div className="hiw-step-num">3</div>
                 <div>
                   <strong>Your power is calculated</strong>
                   <div className="hiw-formula">
-                    Your Power = ( Base Power + Banana Number × 10 ) × Multiplier
+                    Your Power = floor( Base Power × Multiplier ) + Lucky Bonus (0–50)
                   </div>
-                  <p className="hiw-example">
-                    Example: Base 75 · Banana = 6 · Banana Power (×1.5)<br />
-                    → ( 75 + 60 ) × 1.5 = <b style={{ color: 'var(--yellow)' }}>202</b>
-                  </p>
                 </div>
               </div>
-
-              {/* Step 4 */}
               <div className="hiw-step">
                 <div className="hiw-step-num">4</div>
                 <div>
@@ -435,7 +437,6 @@ function GamePage() {
                   <p>
                     The opponent has a <b>random power between 70–160</b>.
                     If <span style={{ color: 'var(--yellow)' }}>Your Power</span> &gt; <span style={{ color: 'var(--red)' }}>Opponent Power</span> → 🏆 Victory!
-                    Otherwise → 💀 Defeated.
                   </p>
                 </div>
               </div>
@@ -444,11 +445,11 @@ function GamePage() {
         )}
       </div>
 
-      {/* Loading state */}
+      {/* Loading */}
       {loading && (
         <div className="card loading-overlay" style={{ marginTop: 24 }}>
           <div className="spinner" />
-          <p>Calling the Banana Oracle… 🍌</p>
+          <p>Channeling your battle energy… ⚡</p>
         </div>
       )}
 
@@ -457,43 +458,9 @@ function GamePage() {
         <div className="alert alert-error" style={{ marginTop: 16 }}>{error}</div>
       )}
 
-      {/* Banana Puzzle — displayed after each action */}
+      {/* Battle result */}
       {result && (
         <>
-          {/* The Banana API math puzzle image */}
-          <div className="card banana-puzzle" style={{ marginTop: 24 }}>
-            <h3>🍌 The Banana Puzzle Says…</h3>
-            {result.puzzleImageUrl && (
-              <img
-                src={result.puzzleImageUrl}
-                alt="Banana API math puzzle"
-                className="puzzle-image"
-                id="banana-puzzle-image"
-              />
-            )}
-            <div className="puzzle-answer" style={{ flexDirection: 'column', gap: 8 }}>
-              <div>
-                <span className="puzzle-answer-label">Solution modifier:</span>
-                <span className="puzzle-answer-number" id="banana-solution">{result.bananaNumber}</span>
-              </div>
-              
-              <div style={{
-                background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: 8,
-                fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: 12,
-                border: '1px solid var(--border)'
-              }}>
-                <div style={{ marginBottom: 4, color: 'var(--text-primary)', fontWeight: 600 }}>Final Power Calculation:</div>
-                <div>
-                  ( <span style={{color:'var(--text-primary)'}}>{character.basePower} Base</span> +&nbsp;
-                  <span style={{color:'var(--yellow)'}}>{result.bananaNumber} × 10 Banana</span> )
-                  × <span style={{color:'var(--orange)'}}>{result.multiplier} Multiplier</span>
-                  &nbsp;=&nbsp; <strong style={{color:'var(--yellow)', fontSize:'1.1rem'}}>{result.playerPower} Power</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Battle result */}
           <div className={`result-banner ${result.result}`} id="battle-result" ref={resultRef}>
             <span className="result-emoji">
               {result.result === 'win' ? '🏆' : '💀'}
@@ -507,12 +474,14 @@ function GamePage() {
                 : `The opponent's ${result.opponentPower} power overwhelmed your ${result.playerPower}.`
               }
             </div>
+            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginTop: 8 }}>
+              Base ×{result.multiplier} + {result.luckyBonus} Lucky Bonus = {result.playerPower} Power
+            </div>
             {result.score > 0 && (
               <div className="result-score">+{result.score} pts added to leaderboard 🎯</div>
             )}
           </div>
 
-          {/* Post-battle actions */}
           <div className="post-battle-actions" style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 20, flexWrap: 'wrap' }}>
             <button className="btn btn-primary" onClick={() => { soundClick(); setResult(null); }} id="play-again-btn">
               ⚔️ Attack Again
@@ -523,8 +492,20 @@ function GamePage() {
             <button className="btn btn-secondary" onClick={() => { soundClick(); navigate('/leaderboard'); }} id="view-leaderboard-btn">
               🏆 View Leaderboard
             </button>
+            <button className="btn btn-secondary" onClick={() => { soundClick(); navigate('/puzzle'); }} id="go-recharge-btn">
+              🧩 Recharge Energy
+            </button>
           </div>
         </>
+      )}
+
+      {/* Low-energy popup */}
+      {lowEnergyMsg && (
+        <LowEnergyPopup
+          msg={lowEnergyMsg}
+          onClose={() => setLowEnergyMsg(null)}
+          onGoToTrials={() => { soundClick(); navigate('/puzzle'); }}
+        />
       )}
     </div>
   );

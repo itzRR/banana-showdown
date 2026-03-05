@@ -1,14 +1,10 @@
 // ============================================================
-//  Game Controller — Banana API interoperability + game logic
-//  [API INTEROPERABILITY] — Backend calls Banana API here
+//  Game Controller — Battle logic (energy-based, no Banana API)
 //  [EVENT HANDLER] — Responds to player action events from frontend
+//  Power formula: playerPower = Math.floor(basePower * multiplier) + random(0-50)
 // ============================================================
 
-const fetch = require('node-fetch');
 const { addEntry } = require('../models/leaderboardModel');
-
-// Banana API endpoint
-const BANANA_API_URL = 'http://marcconrad.com/uob/banana/api.php?out=json';
 
 // Each action has a base multiplier that affects the final score
 const ACTION_MULTIPLIERS = {
@@ -29,23 +25,9 @@ async function play(req, res) {
   const multiplier = ACTION_MULTIPLIERS[action] || 1.0;
 
   try {
-    // [API INTEROPERABILITY] — Call external Banana API
-    const bananaRes = await fetch(BANANA_API_URL);
-    if (!bananaRes.ok) {
-      throw new Error(`Banana API responded with status ${bananaRes.status}`);
-    }
-
-    // Parse JSON response from Banana API
-    // Response shape: { question: "<image_url>", solution: <number 0-9> }
-    const bananaData = await bananaRes.json();
-
-    const bananaNumber = bananaData.solution; // 0–9 modifier from the puzzle
-    const puzzleImageUrl = bananaData.question; // URL of the banana math puzzle image
-
-    // Game logic:
-    // Player's final power = basePower + (bananaNumber * 10) * multiplier
-    // Opponent gets a fixed random power between 50–100
-    const playerPower = Math.floor((character.basePower + bananaNumber * 10) * multiplier);
+    // Arena battle formula — luck modifier is now random (0-50), no Banana API needed in battle
+    const luckyBonus   = Math.floor(Math.random() * 51); // 0–50 random bonus
+    const playerPower  = Math.floor(character.basePower * multiplier) + luckyBonus;
     const opponentPower = Math.floor(Math.random() * 91) + 70; // 70–160
 
     const playerWins = playerPower > opponentPower;
@@ -59,28 +41,26 @@ async function play(req, res) {
       action,
       playerPower,
       opponentPower,
-      bananaNumber,
       score,
       result: playerWins ? 'win' : 'lose',
       playedAt: new Date().toISOString()
     };
     await addEntry(entry);
 
-    // Return full result to frontend
+    // Return result to frontend
     return res.json({
-      bananaNumber,         // The puzzle solution (0–9)
-      puzzleImageUrl,       // The banana math puzzle image to display
       playerPower,
       opponentPower,
       result: playerWins ? 'win' : 'lose',
       score,
       action,
-      multiplier
+      multiplier,
+      luckyBonus
     });
 
   } catch (err) {
-    console.error('Banana API error:', err.message);
-    return res.status(502).json({ error: 'Could not reach Banana API. Please try again.' });
+    console.error('Game play error:', err.message);
+    return res.status(500).json({ error: 'Something went wrong in the Arena. Try again!' });
   }
 }
 

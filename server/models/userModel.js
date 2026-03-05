@@ -24,5 +24,15 @@ async function saveUser(user) {
   await saveDB(db);
 }
 
-module.exports = { findUserByUsername, findUserById, saveUser };
+async function updateUserEnergy(userId, energy) {
+  const db = await getDB();
+  if (!db.users) db.users = [];
+  const idx = db.users.findIndex(u => u.id === userId);
+  if (idx !== -1) {
+    db.users[idx].energy = energy;
+    await saveDB(db);
+  }
+}
+
+module.exports = { findUserByUsername, findUserById, saveUser, updateUserEnergy };
 

@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 const gameRoutes = require('./routes/game');
 const leaderboardRoutes = require('./routes/leaderboard');
+const puzzleRoutes = require('./routes/puzzle');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/game', gameRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/puzzle', puzzleRoutes);
 
 // Health check
 app.get('/', (req, res) => {

@@ -1439,3 +1439,359 @@ body {
   flex-direction: column;
   align-items: flex-start;
 }
+
+
+/* ============================================================
+   ⚡ ENERGY SYSTEM — Bar, animations, badges
+   ============================================================ */
+
+/* Energy bar panel — shown on puzzle and game pages */
+.energy-bar-panel {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 214, 51, 0.2);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 8px;
+  backdrop-filter: blur(8px);
+  transition: box-shadow 0.3s ease;
+}
+
+.energy-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.energy-bar-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.energy-bar-value {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.energy-bar-track {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+}
+
+.energy-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
+  position: relative;
+}
+/* Shimmer on the bar fill */
+.energy-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+  animation: energyShimmer 2s linear infinite;
+}
+@keyframes energyShimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.energy-bar-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* Energy gain animation — electric surge */
+.energy-gain {
+  animation: energyGainPulse 0.8s ease;
+}
+@keyframes energyGainPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255,214,51,0);    border-color: rgba(255,214,51,0.2); }
+  30%  { box-shadow: 0 0 0 8px rgba(255,214,51,0.25); border-color: rgba(255,214,51,0.8); }
+  100% { box-shadow: 0 0 0 0 rgba(255,214,51,0);    border-color: rgba(255,214,51,0.2); }
+}
+
+/* Energy drain animation — red pulse */
+.energy-drain {
+  animation: energyDrainPulse 0.8s ease;
+}
+@keyframes energyDrainPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255,71,87,0);    border-color: rgba(255,214,51,0.2); }
+  30%  { box-shadow: 0 0 0 8px rgba(255,71,87,0.35); border-color: rgba(255,71,87,0.8); }
+  100% { box-shadow: 0 0 0 0 rgba(255,71,87,0);    border-color: rgba(255,214,51,0.2); }
+}
+
+/* Action button energy cost badge */
+.action-energy-cost {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--yellow);
+  background: rgba(255,214,51,0.1);
+  border: 1px solid rgba(255,214,51,0.25);
+  border-radius: 20px;
+  padding: 2px 9px;
+  letter-spacing: 0.3px;
+}
+
+/* Low-energy state — dim the button slightly */
+.action-btn.btn-energy-low {
+  border-color: rgba(255,71,87,0.35) !important;
+  opacity: 0.75;
+}
+.action-btn.btn-energy-low .action-energy-cost {
+  color: var(--red);
+  background: rgba(255,71,87,0.1);
+  border-color: rgba(255,71,87,0.3);
+}
+
+/* ── Navbar energy badge ── */
+.nav-energy-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,214,51,0.07);
+  border: 1px solid rgba(255,214,51,0.2);
+  border-radius: 20px;
+  padding: 4px 10px 4px 8px;
+  flex-shrink: 0;
+}
+.nav-energy-icon { font-size: 0.9rem; }
+.nav-energy-bar-track {
+  width: 42px;
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.nav-energy-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+.nav-energy-num {
+  font-size: 0.78rem;
+  font-weight: 800;
+  min-width: 20px;
+  text-align: right;
+}
+
+/* Energy display in mobile nav drawer */
+.mobile-nav-energy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   🧩 BANANA TRIALS — Puzzle Page
+   ============================================================ */
+
+.puzzle-trial-card {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.puzzle-trial-header h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--yellow);
+  margin-bottom: 4px;
+}
+
+.puzzle-trial-image-wrap {
+  position: relative;
+  display: inline-block;
+  margin: 24px auto 4px;
+}
+
+.puzzle-trial-image {
+  max-width: 320px;
+  width: 100%;
+  border-radius: 12px;
+  border: 2px solid rgba(255,214,51,0.3);
+  box-shadow: 0 0 30px rgba(255,214,51,0.15), 0 8px 24px rgba(0,0,0,0.5);
+  display: block;
+}
+
+.puzzle-trial-image-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 16px;
+  border: 2px solid rgba(255,214,51,0.15);
+  pointer-events: none;
+  animation: puzzleGlow 2s ease-in-out infinite alternate;
+}
+@keyframes puzzleGlow {
+  from { box-shadow: 0 0 10px rgba(255,214,51,0.1); }
+  to   { box-shadow: 0 0 28px rgba(255,214,51,0.35); }
+}
+
+.puzzle-trial-form {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.puzzle-trial-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.puzzle-trial-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.puzzle-trial-input {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  width: 90px !important;
+  flex-shrink: 0;
+  padding: 10px 8px !important;
+  letter-spacing: 2px;
+}
+
+/* Feedback block shown after submission */
+.puzzle-trial-feedback {
+  margin-top: 24px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  animation: feedbackPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes feedbackPop {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.puzzle-trial-feedback.correct {
+  background: rgba(46,213,115,0.1);
+  border: 1px solid rgba(46,213,115,0.35);
+}
+.puzzle-trial-feedback.wrong {
+  background: rgba(255,71,87,0.1);
+  border: 1px solid rgba(255,71,87,0.35);
+}
+.puzzle-feedback-delta {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  animation: deltaFloat 0.6s ease;
+}
+@keyframes deltaFloat {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.puzzle-trial-feedback.correct .puzzle-feedback-delta { color: var(--green); }
+.puzzle-trial-feedback.wrong   .puzzle-feedback-delta { color: var(--red);   }
+.puzzle-feedback-msg {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.puzzle-feedback-correct {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+.puzzle-trial-info {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   ⚡ LOW-ENERGY POPUP — Creative lore notification
+   ============================================================ */
+
+.low-energy-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+  animation: fadeIn 0.2s ease;
+}
+
+.low-energy-popup {
+  background: linear-gradient(135deg, rgba(20,10,10,0.97) 0%, rgba(15,10,25,0.97) 100%);
+  border: 1px solid rgba(255,71,87,0.5);
+  border-radius: 24px;
+  padding: 40px 36px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(255,71,87,0.25), 0 24px 80px rgba(0,0,0,0.8);
+  animation: popupBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popupBounce {
+  from { opacity: 0; transform: scale(0.8) translateY(20px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+
+.low-energy-bolt {
+  font-size: 3.5rem;
+  display: inline-block;
+  margin-bottom: 12px;
+  animation: boltShake 0.5s ease 0.15s infinite;
+  filter: drop-shadow(0 0 12px rgba(255,71,87,0.7));
+}
+@keyframes boltShake {
+  0%, 100% { transform: rotate(-8deg) scale(1);    }
+  25%       { transform: rotate(8deg)  scale(1.08); }
+  75%       { transform: rotate(-4deg) scale(1.04); }
+}
+
+.low-energy-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--red);
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+  text-shadow: 0 0 16px rgba(255,71,87,0.5);
+}
+
+.low-energy-body {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.low-energy-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .nav-energy-badge { display: none; }
+  .puzzle-trial-image { max-width: 280px; }
+  .low-energy-popup { padding: 28px 20px; }
+  .low-energy-bolt { font-size: 2.5rem; }
+}
+

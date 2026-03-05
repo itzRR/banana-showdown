@@ -3,12 +3,14 @@
 //  Defines all routes and wraps protected ones
 // ============================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { EnergyProvider, useEnergy } from './context/EnergyContext';
 
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import BananaPuzzlePage from './pages/BananaPuzzlePage';
 import CharacterSelectPage from './pages/CharacterSelectPage';
 import GamePage from './pages/GamePage';
 import LeaderboardPage from './pages/LeaderboardPage';
@@ -19,25 +21,31 @@ import { unlockAudio } from './utils/sounds';
 import { prefetchCharacterVideos } from './utils/prefetch';
 import { playMusic, TRACKS } from './utils/music';
 
-function App() {
+// Inner component so it can access EnergyProvider context
+function AppInner() {
   const { user, loading } = useAuth();
+  const { loadEnergyFromServer } = useEnergy();
   const [splashDone, setSplashDone] = useState(false);
 
+  // Load energy from server once user is confirmed logged in
+  useEffect(() => {
+    if (user) {
+      loadEnergyFromServer();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
   function handleSplashClick() {
-    // ✅ Everything here runs synchronously inside the user gesture
-    // so HTMLAudioElement.play() is guaranteed to be allowed by the browser.
     unlockAudio();
     prefetchCharacterVideos();
     setSplashDone(true);
 
-    // Play the right track for whatever page is currently showing
     const path = window.location.pathname;
-    if (path.startsWith('/game'))   playMusic(TRACKS.BATTLE);
+    if (path.startsWith('/game'))    playMusic(TRACKS.BATTLE);
     else if (path.startsWith('/select')) playMusic(TRACKS.CHARACTER);
-    else                             playMusic(TRACKS.MENU);
+    else                              playMusic(TRACKS.MENU);
   }
 
-  // Wait for session check before rendering routes
   if (loading) {
     return (
       <div className="loading-overlay" style={{ minHeight: '100vh' }}>
@@ -92,11 +100,14 @@ function App() {
 
       <Navbar />
       <Routes>
-        {/* Public routes — redirect to /select if already logged in */}
-        <Route path="/login"    element={user ? <Navigate to="/select" replace /> : <LoginPage />} />
-        <Route path="/register" element={user ? <Navigate to="/select" replace /> : <RegisterPage />} />
+        {/* Public routes — redirect to /puzzle if already logged in */}
+        <Route path="/login"    element={user ? <Navigate to="/puzzle" replace /> : <LoginPage />} />
+        <Route path="/register" element={user ? <Navigate to="/puzzle" replace /> : <RegisterPage />} />
 
         {/* Protected routes — require login */}
+        <Route path="/puzzle" element={
+          <ProtectedRoute><BananaPuzzlePage /></ProtectedRoute>
+        } />
         <Route path="/select" element={
           <ProtectedRoute><CharacterSelectPage /></ProtectedRoute>
         } />
@@ -115,5 +126,12 @@ function App() {
   );
 }
 
-export default App;
+function App() {
+  return (
+    <EnergyProvider>
+      <AppInner />
+    </EnergyProvider>
+  );
+}
 
+export default App;
