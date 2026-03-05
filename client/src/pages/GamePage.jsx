@@ -1,8 +1,7 @@
 // ============================================================
 //  GamePage — The Arena: energy-based battle
-//  ⚡ Energy costs: Attack=5  Random Skill=10  Banana Power=15
-//  Power formula: Math.floor(basePower * multiplier) + random(0-50)
-//  No Banana puzzle shown here — that's Banana Trials (/puzzle)
+//  ⚡ Energy costs: Attack=15  Random Skill=30  Banana Power=45
+//  Power formula: floor(basePower × multiplier) — 50/50 win rate, no lucky bonus
 // ============================================================
 
 import { useState, useEffect, useRef } from 'react';
@@ -28,9 +27,9 @@ const BOSS_IMAGES = BOSSES.map(b => b.image);
 
 // Energy costs per action
 const ENERGY_COSTS = {
-  attack:      5,
-  randomSkill: 10,
-  bananaPower: 15,
+  attack:      15,
+  randomSkill: 30,
+  bananaPower: 45,
 };
 
 // Creative low-energy popup messages matching the game's lore

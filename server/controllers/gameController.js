@@ -1,16 +1,17 @@
 // ============================================================
 //  Game Controller — Battle logic (energy-based, no Banana API)
-//  [EVENT HANDLER] — Responds to player action events from frontend
-//  Power formula: playerPower = Math.floor(basePower * multiplier) + random(0-50)
+//  Formula: playerPower = floor(basePower × multiplier)  [no lucky bonus]
+//  Opponent: random(0, 2×playerPower) → exactly 50/50 win rate
+//  Higher cost = bigger multiplier = bigger score when you win
 // ============================================================
 
 const { addEntry } = require('../models/leaderboardModel');
 
-// Each action has a base multiplier that affects the final score
+// Multipliers only affect the score magnitude — all actions are 50/50 odds
 const ACTION_MULTIPLIERS = {
-  attack:      1.0,   // Standard attack
-  randomSkill: 1.25,  // Random skill — 1.25x boost
-  bananaPower: 1.5    // Banana Power — ultimate, 1.5x multiplier
+  attack:      1.0,   // ⚔️  Cheap — standard power
+  randomSkill: 1.5,   // 🎲  Medium — 1.5× payoff
+  bananaPower: 2.5    // 🍌  Expensive — 2.5× payoff
 };
 
 // POST /api/game/play
@@ -25,10 +26,10 @@ async function play(req, res) {
   const multiplier = ACTION_MULTIPLIERS[action] || 1.0;
 
   try {
-    // Arena battle formula — luck modifier is now random (0-50), no Banana API needed in battle
-    const luckyBonus   = Math.floor(Math.random() * 51); // 0–50 random bonus
-    const playerPower  = Math.floor(character.basePower * multiplier) + luckyBonus;
-    const opponentPower = Math.floor(Math.random() * 91) + 70; // 70–160
+    // Player power — deterministic, no lucky bonus
+    const playerPower   = Math.floor(character.basePower * multiplier);
+    // Opponent — calibrated for exactly 50/50 win rate
+    const opponentPower = Math.floor(Math.random() * playerPower * 2);
 
     const playerWins = playerPower > opponentPower;
     const score = playerWins ? playerPower : 0;
@@ -54,8 +55,7 @@ async function play(req, res) {
       result: playerWins ? 'win' : 'lose',
       score,
       action,
-      multiplier,
-      luckyBonus
+      multiplier
     });
 
   } catch (err) {
