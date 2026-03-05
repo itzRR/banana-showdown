@@ -8,7 +8,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import api from '../utils/api';
 import { useEnergy } from '../context/EnergyContext';
-import { soundSelect, soundClick, soundWin, soundLose } from '../utils/sounds';
+import { soundSelect, soundClick, soundHover, soundWin, soundLose } from '../utils/sounds';
 import { playMusic, stopMusic, TRACKS } from '../utils/music';
 
 const CORRECT_MSGS = [
@@ -39,6 +39,7 @@ function DigitPad({ value, onChange, disabled }) {
           type="button"
           className={`digit-btn${value === String(i) ? ' digit-btn-active' : ''}`}
           onClick={() => { soundClick(); onChange(String(i)); }}
+          onMouseEnter={soundHover}
           disabled={disabled}
         >
           {i}

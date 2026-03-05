@@ -1477,52 +1477,62 @@ body {
 }
 
 .energy-bar-track {
-  height: 14px;
-  background: rgba(255, 255, 255, 0.04);
+  height: 16px;
+  background: rgba(255, 214, 51, 0.05);
   border-radius: 99px;
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 214, 51, 0.15);
 }
-/* Electric static noise on the EMPTY portion of the bar */
+/* Electric static drift — visible bright stripes on empty space */
 .energy-bar-track::before {
   content: '';
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     90deg,
-    transparent 0px,
-    transparent 4px,
-    rgba(255,214,51,0.07) 4px,
-    rgba(255,214,51,0.07) 5px
+    transparent        0px,
+    transparent        6px,
+    rgba(255,214,51,0.30) 6px,
+    rgba(255,214,51,0.30) 7px,
+    transparent        7px,
+    transparent        12px,
+    rgba(255,255,255,0.12) 12px,
+    rgba(255,255,255,0.12) 13px
   );
-  animation: electricDrift 0.3s linear infinite;
+  animation: electricDrift 0.25s linear infinite;
   pointer-events: none;
+  z-index: 0;
 }
 @keyframes electricDrift {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(9px); }
+  100% { transform: translateX(13px); }
 }
-/* Occasional bright bolt flash on the empty track */
+/* Bold bolt flash sweeping across the empty track */
 .energy-bar-track::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg,
-    transparent 20%,
-    rgba(255,214,51,0.12) 45%,
-    rgba(255,255,255,0.18) 50%,
-    rgba(255,214,51,0.12) 55%,
-    transparent 80%
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,214,51,0.0)  35%,
+    rgba(255,214,51,0.45) 48%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(255,214,51,0.45) 52%,
+    rgba(255,214,51,0.0)  65%,
+    transparent 100%
   );
-  animation: boltSpark 2.4s ease-in-out infinite;
+  animation: boltSpark 2.2s ease-in-out infinite;
   pointer-events: none;
+  z-index: 0;
 }
 @keyframes boltSpark {
-  0%, 100% { opacity: 0; transform: translateX(-100%); }
-  30%       { opacity: 0; }
-  50%       { opacity: 1; transform: translateX(0); }
-  70%       { opacity: 0; transform: translateX(100%); }
+  0%          { opacity: 0; transform: translateX(-120%); }
+  10%         { opacity: 0; }
+  40%, 60%    { opacity: 1; }
+  55%         { transform: translateX(0); }
+  85%, 100%   { opacity: 0; transform: translateX(120%); }
 }
 
 .energy-bar-fill {
@@ -1531,15 +1541,15 @@ body {
   transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
   position: relative;
   z-index: 1;
-  box-shadow: 2px 0 12px currentColor;
+  box-shadow: 2px 0 14px rgba(255,214,51,0.5);
 }
 /* Shimmer on the filled part */
 .energy-bar-fill::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
-  animation: energyShimmer 1.6s linear infinite;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  animation: energyShimmer 1.4s linear infinite;
   border-radius: 99px;
 }
 @keyframes energyShimmer {
