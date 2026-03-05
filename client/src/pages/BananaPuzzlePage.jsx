@@ -5,7 +5,7 @@
 //  Correct answer → +15⚡  |  Wrong answer → -10⚡
 // ============================================================
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import api from '../utils/api';
 import { useEnergy } from '../context/EnergyContext';
 import { soundSelect, soundClick, soundHover, soundWin, soundLose } from '../utils/sounds';
@@ -64,10 +64,30 @@ function BananaPuzzlePage() {
     const saved = parseInt(localStorage.getItem('bs_streak'), 10);
     return isNaN(saved) ? 0 : saved;
   });
-  // Persist streak across refreshes
+
+  // Debounced server save for streak
+  const streakSaveTimer = useRef(null);
+  function saveStreakToServer(val) {
+    localStorage.setItem('bs_streak', String(val));
+    if (streakSaveTimer.current) clearTimeout(streakSaveTimer.current);
+    streakSaveTimer.current = setTimeout(() => {
+      api.post('/api/puzzle/streak', { streak: val }).catch(() => {});
+    }, 1200);
+  }
+
+  // Load energy + streak from server on mount
   useEffect(() => {
-    localStorage.setItem('bs_streak', String(streak));
-  }, [streak]);
+    api.get('/api/puzzle/progress')
+      .then(res => {
+        if (typeof res.data.streak === 'number') {
+          setStreak(res.data.streak);
+          localStorage.setItem('bs_streak', String(res.data.streak));
+        }
+        // Energy is managed by EnergyContext — loadEnergyFromServer() called in App.jsx
+      })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     playMusic(TRACKS.MENU);
@@ -106,7 +126,11 @@ function BananaPuzzlePage() {
       soundWin();
       addEnergy(ENERGY_GAIN);
       setEnergyAnim('gain');
-      setStreak(s => s + 1);
+      setStreak(s => {
+        const next = s + 1;
+        saveStreakToServer(next);
+        return next;
+      });
       setFeedback({
         type: 'correct',
         msg: CORRECT_MSGS[Math.floor(Math.random() * CORRECT_MSGS.length)],
@@ -117,6 +141,7 @@ function BananaPuzzlePage() {
       spendEnergy(ENERGY_COST);
       setEnergyAnim('drain');
       setStreak(0);
+      saveStreakToServer(0);
       setFeedback({
         type: 'wrong',
         msg: WRONG_MSGS[Math.floor(Math.random() * WRONG_MSGS.length)],

@@ -34,5 +34,15 @@ async function updateUserEnergy(userId, energy) {
   }
 }
 
-module.exports = { findUserByUsername, findUserById, saveUser, updateUserEnergy };
+async function updateUserStreak(userId, streak) {
+  const db = await getDB();
+  if (!db.users) db.users = [];
+  const idx = db.users.findIndex(u => u.id === userId);
+  if (idx !== -1) {
+    db.users[idx].streak = streak;
+    await saveDB(db);
+  }
+}
+
+module.exports = { findUserByUsername, findUserById, saveUser, updateUserEnergy, updateUserStreak };
 
