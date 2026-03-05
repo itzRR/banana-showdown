@@ -194,7 +194,30 @@ function BananaPuzzlePage() {
           <div className={`trials-energy-card${energyAnim ? ` energy-${energyAnim}` : ''}`}>
             <div className="trials-energy-orb-wrap">
               <svg className="trials-energy-ring" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
+                {/* 1. Track — visible dark ring for the whole circle */}
+                <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth="8"/>
+
+                {/* 2. Electric dashes — animated, only visible in the EMPTY arc */}
+                <circle
+                  cx="60" cy="60" r="52" fill="none"
+                  stroke="rgba(255,214,51,0.55)"
+                  strokeWidth="8"
+                  strokeDasharray="5 9"
+                  className="trials-electric-arc"
+                  style={{ transform: 'rotate(-90deg)', transformOrigin: '60px 60px' }}
+                />
+
+                {/* 3. Second electric layer (offset) — creates double-pulse illusion */}
+                <circle
+                  cx="60" cy="60" r="52" fill="none"
+                  stroke="rgba(255,255,255,0.25)"
+                  strokeWidth="8"
+                  strokeDasharray="2 20"
+                  className="trials-electric-arc-fast"
+                  style={{ transform: 'rotate(-90deg)', transformOrigin: '60px 60px' }}
+                />
+
+                {/* 4. Fill arc — covers layers 2+3 in the filled portion */}
                 <circle
                   cx="60" cy="60" r="52" fill="none"
                   stroke={energyColor}

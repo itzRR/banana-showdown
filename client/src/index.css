@@ -1920,6 +1920,23 @@ body {
   height: 130px;
   filter: drop-shadow(0 0 8px currentColor);
 }
+/* Circumference for r=52 is ~326.7px */
+/* Slow dash sweep — yellow electric pulses */
+.trials-electric-arc {
+  animation: electricArcSlow 1.2s linear infinite;
+}
+@keyframes electricArcSlow {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -42; } /* 5+9=14 × 3 pattern cycles */
+}
+/* Fast spark sweep — white flashes */
+.trials-electric-arc-fast {
+  animation: electricArcFast 0.6s linear infinite;
+}
+@keyframes electricArcFast {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -44; } /* 2+20=22 × 2 */
+}
 .trials-energy-orb-inner {
   position: absolute;
   inset: 0;
