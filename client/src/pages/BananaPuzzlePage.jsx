@@ -124,7 +124,15 @@ function BananaPuzzlePage() {
 
   const energyPct   = Math.round((energy / maxEnergy) * 100);
   const energyColor = energy >= 60 ? '#ffd633' : energy >= 25 ? '#ff8c42' : '#ff4757';
-  const energyStatus = energy >= 80 ? 'PRIMED' : energy >= 40 ? 'CHARGING' : energy >= 15 ? 'LOW' : 'CRITICAL';
+  const energyStatus = energy >= 80
+    ? '⚡ Unstoppable — enter The Arena now!'
+    : energy >= 60
+    ? '🍌 Power surging — The Oracle is pleased.'
+    : energy >= 40
+    ? '⚡ Storm building… keep solving, warrior.'
+    : energy >= 15
+    ? '💀 The dark drains you — solve more trials!'
+    : '🔴 Critical charge — the Arena will deny you!';
 
   return (
     <div className="page trials-page">

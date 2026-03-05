@@ -268,9 +268,13 @@ function GamePage() {
             style={{ width: `${energyPct}%`, background: `linear-gradient(90deg, ${energyColor}, var(--yellow))` }}
           />
         </div>
-        {energy < 15 && (
-          <div className="energy-bar-hint" style={{ color: 'var(--red)' }}>
-            ⚠️ Critical energy! Go to Banana Trials to recharge.
+        {energy < 30 && (
+          <div className="energy-bar-hint" style={{ color: energyColor }}>
+            {energy < 5
+              ? '🔴 No power left — the Arena refuses you!'
+              : energy < 15
+              ? '💀 Fading fast… retreat to Banana Trials!'
+              : '⚡ Running low — recharge between fights!'}
           </div>
         )}
       </div>
