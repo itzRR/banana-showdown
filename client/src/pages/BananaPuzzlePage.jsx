@@ -60,7 +60,14 @@ function BananaPuzzlePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError]           = useState('');
   const [answered, setAnswered]     = useState(false);
-  const [streak, setStreak]         = useState(0);
+  const [streak, setStreak] = useState(() => {
+    const saved = parseInt(localStorage.getItem('bs_streak'), 10);
+    return isNaN(saved) ? 0 : saved;
+  });
+  // Persist streak across refreshes
+  useEffect(() => {
+    localStorage.setItem('bs_streak', String(streak));
+  }, [streak]);
 
   useEffect(() => {
     playMusic(TRACKS.MENU);
