@@ -1795,3 +1795,498 @@ body {
   .low-energy-bolt { font-size: 2.5rem; }
 }
 
+
+/* ============================================================
+   🧩 BANANA TRIALS — Premium Redesign
+   ============================================================ */
+
+.trials-page {
+  padding-bottom: 60px;
+}
+
+/* ── Hero Header ── */
+.trials-hero {
+  text-align: center;
+  padding: 8px 0 28px;
+}
+.trials-hero-badge {
+  display: inline-block;
+  background: rgba(255, 214, 51, 0.1);
+  border: 1px solid rgba(255, 214, 51, 0.3);
+  color: var(--yellow);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  animation: badgePulse 2.5s ease-in-out infinite alternate;
+}
+@keyframes badgePulse {
+  from { box-shadow: 0 0 4px rgba(255,214,51,0.1); }
+  to   { box-shadow: 0 0 16px rgba(255,214,51,0.4); }
+}
+.trials-hero-title {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #ffe066 0%, #ff9900 60%, #ff4757 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.trials-hero-icon {
+  display: inline-block;
+  margin-right: 10px;
+  filter: drop-shadow(0 0 12px rgba(255,214,51,0.6));
+  animation: heroIconFloat 3s ease-in-out infinite;
+}
+@keyframes heroIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+.trials-hero-sub {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto;
+}
+.trials-accent {
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+/* ── Two-column layout ── */
+.trials-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .trials-layout { grid-template-columns: 1fr; }
+}
+
+/* ── LEFT SIDEBAR ── */
+.trials-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Energy orb card */
+.trials-energy-card {
+  background: rgba(255, 214, 51, 0.04);
+  border: 1px solid rgba(255, 214, 51, 0.18);
+  border-radius: 20px;
+  padding: 24px 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.trials-energy-orb-wrap {
+  position: relative;
+  display: inline-block;
+  width: 130px;
+  height: 130px;
+  margin-bottom: 12px;
+}
+.trials-energy-ring {
+  width: 130px;
+  height: 130px;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+.trials-energy-orb-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.trials-energy-number {
+  font-size: 1.9rem;
+  font-weight: 900;
+  line-height: 1;
+  transition: color 0.4s ease;
+}
+.trials-energy-max {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.trials-energy-bolt {
+  font-size: 1rem;
+  margin-top: 2px;
+  animation: boltFlash 1.2s ease-in-out infinite alternate;
+}
+.trials-energy-status {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.4s ease;
+  margin-bottom: 3px;
+}
+.trials-energy-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Streak card */
+.trials-streak-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 20px;
+  text-align: center;
+}
+.trials-streak-num {
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+.trials-streak-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Rules card */
+.trials-rules-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.trials-rules-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.trials-rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.trials-rule-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+}
+.trials-rule-val {
+  margin-left: auto;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.trials-rule.correct .trials-rule-val { color: var(--green); }
+.trials-rule.wrong   .trials-rule-val { color: var(--red);   }
+.trials-rule.neutral .trials-rule-val { color: var(--yellow); }
+
+/* ── RIGHT MAIN AREA ── */
+.trials-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Oracle header */
+.trials-oracle-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 22px;
+}
+.trials-oracle-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 10px rgba(255,214,51,0.5));
+  animation: heroIconFloat 3s ease-in-out infinite;
+}
+.trials-oracle-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--yellow);
+}
+.trials-oracle-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Loading */
+.trials-loading {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+.trials-spinner {
+  font-size: 3rem;
+  animation: trialsSpin 1s linear infinite;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+@keyframes trialsSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.trials-loading p { color: var(--text-muted); font-size: 0.9rem; }
+
+.trials-error { margin: 0; }
+
+/* Puzzle area wrapper */
+.trials-puzzle-area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Puzzle frame - the image display */
+.trials-puzzle-frame {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 214, 51, 0.25);
+  border-radius: 20px;
+  padding: 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.trials-puzzle-frame.frame-correct {
+  border-color: rgba(46, 213, 115, 0.7);
+  box-shadow: 0 0 30px rgba(46, 213, 115, 0.2);
+}
+.trials-puzzle-frame.frame-wrong {
+  border-color: rgba(255, 71, 87, 0.7);
+  box-shadow: 0 0 30px rgba(255, 71, 87, 0.2);
+}
+
+/* Corner decorations */
+.trials-puzzle-corners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.trials-puzzle-corners span {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: var(--yellow);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.6;
+}
+.trials-puzzle-corners span:nth-child(1) { top: 10px; left: 10px;  border-top-width: 2px; border-left-width: 2px; border-top-left-radius: 4px; }
+.trials-puzzle-corners span:nth-child(2) { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; border-top-right-radius: 4px; }
+.trials-puzzle-corners span:nth-child(3) { bottom: 10px; left: 10px;  border-bottom-width: 2px; border-left-width: 2px; border-bottom-left-radius: 4px; }
+.trials-puzzle-corners span:nth-child(4) { bottom: 10px; right: 10px; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 4px; }
+
+.trials-puzzle-img {
+  max-width: 100%;
+  max-height: 260px;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Scanline overlay for techy look */
+.trials-puzzle-scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.06) 3px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+  pointer-events: none;
+  border-radius: 20px;
+}
+
+/* Answer form */
+.trials-answer-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.trials-answer-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+
+/* Digit pad */
+.digit-pad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+}
+.digit-btn {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.digit-btn:hover:not(:disabled) {
+  background: rgba(255, 214, 51, 0.1);
+  border-color: rgba(255, 214, 51, 0.5);
+  color: var(--yellow);
+  transform: scale(1.06);
+}
+.digit-btn-active {
+  background: rgba(255, 214, 51, 0.18) !important;
+  border-color: var(--yellow) !important;
+  color: var(--yellow) !important;
+  box-shadow: 0 0 16px rgba(255, 214, 51, 0.25);
+  transform: scale(1.08);
+}
+.digit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.trials-selected-display {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  min-height: 28px;
+}
+
+.trials-submit-btn {
+  background: linear-gradient(135deg, var(--yellow), var(--orange)) !important;
+  color: #0d0d0d !important;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 14px 48px !important;
+  border-radius: 50px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none !important;
+  box-shadow: 0 4px 24px rgba(255, 214, 51, 0.3);
+  transition: all 0.2s ease !important;
+}
+.trials-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255, 214, 51, 0.45) !important;
+}
+.trials-submit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Feedback */
+.trials-feedback {
+  border-radius: 20px;
+  padding: 32px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: feedbackPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.trials-feedback.correct {
+  background: rgba(46, 213, 115, 0.08);
+  border: 1px solid rgba(46, 213, 115, 0.35);
+}
+.trials-feedback.wrong {
+  background: rgba(255, 71, 87, 0.08);
+  border: 1px solid rgba(255, 71, 87, 0.35);
+}
+.trials-feedback-delta {
+  font-size: 2.6rem;
+  font-weight: 900;
+  animation: deltaFloat 0.5s ease;
+}
+.trials-feedback.correct .trials-feedback-delta { color: var(--green); }
+.trials-feedback.wrong   .trials-feedback-delta { color: var(--red);   }
+.trials-feedback-icon {
+  font-size: 2.8rem;
+  animation: iconBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+@keyframes iconBounce {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1);   }
+}
+.trials-feedback-msg {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  max-width: 340px;
+  line-height: 1.5;
+}
+.trials-feedback-reveal {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.trials-feedback-reveal strong {
+  color: var(--yellow);
+  font-size: 1.1rem;
+}
+.trials-next-btn {
+  margin-top: 8px;
+  background: transparent !important;
+  border: 1px solid var(--border-bright) !important;
+  color: var(--yellow) !important;
+  font-weight: 700;
+  transition: all 0.2s ease !important;
+}
+.trials-next-btn:hover {
+  background: rgba(255, 214, 51, 0.08) !important;
+  box-shadow: 0 0 20px rgba(255, 214, 51, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Mobile tweaks */
+@media (max-width: 900px) {
+  .trials-hero-title { font-size: 1.8rem; }
+  .trials-sidebar { flex-direction: row; flex-wrap: wrap; }
+  .trials-energy-card { flex: 1; min-width: 180px; }
+  .trials-streak-card { min-width: 100px; }
+  .trials-rules-card { flex: 1; min-width: 200px; }
+}
+@media (max-width: 480px) {
+  .trials-hero-title { font-size: 1.5rem; }
+  .trials-sidebar { flex-direction: column; }
+  .digit-pad { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .digit-btn { font-size: 1rem; }
+  .trials-puzzle-frame { padding: 18px; }
+  .trials-feedback { padding: 24px 16px; }
+}
