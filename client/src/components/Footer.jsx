@@ -10,20 +10,19 @@ function Footer() {
   const modalRef = useRef(null);
 
   const handleDodgeHover = () => {
-    const modal = modalRef.current;
-    if (!modal) return;
-    const { width, height } = modal.getBoundingClientRect();
-    // Pick a random spot inside the modal, keeping the button (~160x40) in bounds
-    const maxX = width - 170;
-    const maxY = height - 50;
+    // Roam the entire screen using fixed positioning
+    const btnW = 180;
+    const btnH = 44;
+    const maxX = window.innerWidth - btnW;
+    const maxY = window.innerHeight - btnH;
     const x = Math.floor(Math.random() * maxX);
     const y = Math.floor(Math.random() * maxY);
     setDodgeStyle({
-      position: 'absolute',
+      position: 'fixed',
       left: x,
       top: y,
       transition: 'left 0.15s ease, top 0.15s ease',
-      zIndex: 10,
+      zIndex: 9999,
     });
   };
 
@@ -53,7 +52,6 @@ function Footer() {
         <div className="char-modal-backdrop" onClick={() => setShowDisclaimer(false)}>
           <div
             className="char-modal disclaimer-modal"
-            style={{ position: 'relative', overflow: 'hidden' }}
             ref={modalRef}
             onClick={e => e.stopPropagation()}
           >
