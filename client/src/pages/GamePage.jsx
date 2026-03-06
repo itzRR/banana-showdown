@@ -477,7 +477,7 @@ function GamePage() {
               }
             </div>
             <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginTop: 8 }}>
-              Base ×{result.multiplier} + {result.luckyBonus} Lucky Bonus = {result.playerPower} Power
+              Base ×{result.multiplier} = {result.playerPower} Power
             </div>
             {result.score > 0 && (
               <div className="result-score">+{result.score} pts added to leaderboard 🎯</div>
