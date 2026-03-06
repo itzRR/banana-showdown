@@ -27,12 +27,18 @@ async function play(req, res) {
 
   try {
     // Player power — deterministic, no lucky bonus
-    const playerPower   = Math.floor(character.basePower * multiplier);
-    // Opponent — always 50%–150% of player power, still exactly 50/50 win rate
-    // P(win) = P(0.5 + random < 1) = P(random < 0.5) = 0.5
-    const opponentPower = Math.floor(playerPower * (0.5 + Math.random()));
+    const playerPower = Math.floor(character.basePower * multiplier);
 
-    const playerWins = playerPower > opponentPower;
+    // Pure 50/50 coin flip — no bias from floor/ceiling tricks
+    const playerWins = Math.random() < 0.5;
+
+    // Generate opponent power that reflects the decided outcome
+    // Win:  boss is 50–99% of player power
+    // Lose: boss is 101–150% of player power
+    const opponentPower = playerWins
+      ? Math.floor(playerPower * (0.5  + Math.random() * 0.49))
+      : Math.floor(playerPower * (1.01 + Math.random() * 0.49));
+
     const score = playerWins ? playerPower : 0;
 
     // Save result to leaderboard
