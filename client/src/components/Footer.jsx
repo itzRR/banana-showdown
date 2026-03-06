@@ -9,7 +9,59 @@ function Footer() {
   const [dodgeStyle, setDodgeStyle] = useState({ position: 'relative' });
   const modalRef = useRef(null);
 
+  const playBoingSound = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const sounds = [
+        // 1. Descending boing
+        () => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(900, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.4);
+          gain.gain.setValueAtTime(0.35, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.45);
+        },
+        // 2. Wobbly spring
+        () => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(400, ctx.currentTime);
+          osc.frequency.setValueAtTime(600, ctx.currentTime + 0.05);
+          osc.frequency.setValueAtTime(200, ctx.currentTime + 0.10);
+          osc.frequency.setValueAtTime(500, ctx.currentTime + 0.15);
+          osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.35);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.4);
+        },
+        // 3. Low "nope" honk
+        () => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(180, ctx.currentTime);
+          osc.frequency.setValueAtTime(140, ctx.currentTime + 0.1);
+          gain.gain.setValueAtTime(0.25, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.3);
+        },
+      ];
+      sounds[Math.floor(Math.random() * sounds.length)]();
+    } catch (_) { /* silence on unsupported browsers */ }
+  };
+
   const handleDodgeHover = () => {
+    playBoingSound();
     // Roam the entire screen using fixed positioning
     const btnW = 180;
     const btnH = 44;
