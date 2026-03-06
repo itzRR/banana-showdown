@@ -2,10 +2,30 @@
 //  Footer — Developed by credit with link
 // ============================================================
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 function Footer() {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [dodgeStyle, setDodgeStyle] = useState({ position: 'relative' });
+  const modalRef = useRef(null);
+
+  const handleDodgeHover = () => {
+    const modal = modalRef.current;
+    if (!modal) return;
+    const { width, height } = modal.getBoundingClientRect();
+    // Pick a random spot inside the modal, keeping the button (~160x40) in bounds
+    const maxX = width - 170;
+    const maxY = height - 50;
+    const x = Math.floor(Math.random() * maxX);
+    const y = Math.floor(Math.random() * maxY);
+    setDodgeStyle({
+      position: 'absolute',
+      left: x,
+      top: y,
+      transition: 'left 0.15s ease, top 0.15s ease',
+      zIndex: 10,
+    });
+  };
 
   return (
     <>
@@ -23,15 +43,20 @@ function Footer() {
         <span style={{ margin: '0 8px', color: 'rgba(255,255,255,0.2)' }}>|</span>
         <button 
           className="footer-disclaimer-btn" 
-          onClick={() => setShowDisclaimer(true)}
+          onClick={() => { setShowDisclaimer(true); setDodgeStyle({ position: 'relative' }); }}
         >
-          Disclaimer & License
+          Disclaimer &amp; License
         </button>
       </footer>
 
       {showDisclaimer && (
         <div className="char-modal-backdrop" onClick={() => setShowDisclaimer(false)}>
-          <div className="char-modal disclaimer-modal" onClick={e => e.stopPropagation()}>
+          <div
+            className="char-modal disclaimer-modal"
+            style={{ position: 'relative', overflow: 'hidden' }}
+            ref={modalRef}
+            onClick={e => e.stopPropagation()}
+          >
             <button className="char-modal-close" onClick={() => setShowDisclaimer(false)}>✕</button>
             <div className="disclaimer-content">
               <h2 style={{ color: 'var(--yellow)', marginBottom: '16px' }}>Character Usage Disclaimer</h2>
@@ -41,8 +66,32 @@ function Footer() {
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '24px' }}>
                 Any resemblance to actual events, brands, or entities is entirely coincidental and for entertainment purposes only.
               </p>
-              <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => setShowDisclaimer(false)}>
+              <button
+                className="btn btn-primary"
+                style={{ width: '100%', marginBottom: '12px' }}
+                onClick={() => setShowDisclaimer(false)}
+              >
                 I Understand
+              </button>
+              {/* Joke button — runs away on hover */}
+              <button
+                className="btn"
+                style={{
+                  ...dodgeStyle,
+                  background: 'rgba(255,255,255,0.07)',
+                  color: 'rgba(255,255,255,0.45)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: '8px',
+                  padding: '10px 20px',
+                  cursor: 'not-allowed',
+                  fontSize: '0.9rem',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={handleDodgeHover}
+                onClick={e => e.preventDefault()}
+                title="lol no"
+              >
+                I Don&apos;t Understand 🤔
               </button>
             </div>
           </div>
