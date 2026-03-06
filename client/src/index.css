@@ -40,6 +40,27 @@ html, body, #root {
   font-family: var(--font);
 }
 
+/* ── Banana-themed Cursors ── */
+*, *::before, *::after {
+  cursor: url('/cursors/banana-default.svg') 4 4, auto;
+}
+a, button, [role="button"], select, label[for],
+input[type="checkbox"], input[type="radio"],
+input[type="submit"], input[type="button"],
+.character-card, .nav-link, .mobile-nav-link,
+.footer-disclaimer-btn, .char-modal-close,
+.music-toggle-btn, .hamburger, .btn {
+  cursor: url('/cursors/banana-pointer.svg') 4 4, pointer;
+}
+input, textarea {
+  cursor: url('/cursors/banana-default.svg') 4 4, text;
+}
+[disabled], .btn:disabled {
+  cursor: url('/cursors/banana-default.svg') 4 4, not-allowed;
+}
+
+
+
 #root {
   isolation: isolate;
   display: flex;

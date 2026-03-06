@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Banana pointer: banana angled to point up-left, hotspot at tip -->
+  <g transform="rotate(-55, 16, 16)">
+    <!-- Banana body -->
+    <path d="M 14 3 C 6 5, 4 13, 6 21 C 7 26, 10 29, 14 29 C 18 29, 20 26, 20 21 C 22 13, 20 5, 14 3 Z"
+          fill="#FFE040" stroke="#C9A800" stroke-width="1.2"/>
+    <!-- Highlight stripe -->
+    <path d="M 12 6 C 8 9, 7 15, 8 20"
+          fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Stem -->
+    <path d="M 14 3 C 13 1, 15 0, 16 2"
+          fill="#7a5c1e" stroke="#5a3e0a" stroke-width="0.8"/>
+    <!-- Tip -->
+    <path d="M 14 29 C 13 30, 15 32, 16 30"
+          fill="#7a5c1e" stroke="#5a3e0a" stroke-width="0.8"/>
+  </g>
+</svg>
