@@ -418,9 +418,9 @@ function GamePage() {
                   <strong>Pick your move</strong>
                   <p>Each move costs energy and has a different power multiplier:</p>
                   <div className="hiw-moves">
-                    <span>⚔️ Attack &nbsp;<b>×1.0</b> &nbsp;— 5⚡</span>
-                    <span>🎲 Random Skill &nbsp;<b>×1.25</b> &nbsp;— 10⚡</span>
-                    <span>🍌 Banana Power &nbsp;<b>×1.5</b> &nbsp;— 15⚡</span>
+                    <span>⚔️ Attack &nbsp;<b>×1.0</b> &nbsp;— 15⚡</span>
+                    <span>🎲 Random Skill &nbsp;<b>×1.5</b> &nbsp;— 30⚡</span>
+                    <span>🍌 Banana Power &nbsp;<b>×2.5</b> &nbsp;— 45⚡</span>
                   </div>
                 </div>
               </div>
@@ -429,7 +429,7 @@ function GamePage() {
                 <div>
                   <strong>Your power is calculated</strong>
                   <div className="hiw-formula">
-                    Your Power = floor( Base Power × Multiplier ) + Lucky Bonus (0–50)
+                    Your Power = floor( Base Power × Multiplier )
                   </div>
                 </div>
               </div>
@@ -438,8 +438,7 @@ function GamePage() {
                 <div>
                   <strong>Beat the opponent to win!</strong>
                   <p>
-                    The opponent has a <b>random power between 70–160</b>.
-                    If <span style={{ color: 'var(--yellow)' }}>Your Power</span> &gt; <span style={{ color: 'var(--red)' }}>Opponent Power</span> → 🏆 Victory!
+                    Every fight is a <b>50/50</b> chance. Win and your score is your Power — bigger moves mean bigger scores! 🏆
                   </p>
                 </div>
               </div>
