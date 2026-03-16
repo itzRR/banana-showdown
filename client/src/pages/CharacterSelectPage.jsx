@@ -228,7 +228,7 @@ const CHARACTERS = [
     avatar: '😈',
     image: '/characters/jennie.webp',
     video: '/characters/jennie.mp4',
-    basePower: 85,
+    basePower: 71,
     characterClass: 'Dark Magic Attacker',
     description: 'Dark, mysterious, and powerful. She radiates a slightly evil energy with her demon-style aura.'
   },
