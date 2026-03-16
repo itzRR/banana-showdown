@@ -227,7 +227,7 @@ const CHARACTERS = [
     alias: 'Shadow Demon',
     avatar: '😈',
     image: '/characters/jennie.webp',
-    video: '/characters/jennie.mp4',
+    video: '/characters/Jennie.mp4',
     basePower: 71,
     characterClass: 'Dark Magic Attacker',
     description: 'Dark, mysterious, and powerful. She radiates a slightly evil energy with her demon-style aura.'
@@ -238,7 +238,7 @@ const CHARACTERS = [
     alias: 'Heart Enchantress',
     avatar: '💖',
     image: '/characters/chenuki.webp',
-    video: '/characters/chenuki.mp4',
+    video: '/characters/Chenuki.mp4',
     basePower: 70,
     characterClass: 'Charm Support',
     description: 'Romantic, kind, and elegant. Her soft but powerful charm energy can weaken enemies or boost teammates.'
