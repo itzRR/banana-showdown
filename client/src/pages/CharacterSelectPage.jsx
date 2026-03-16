@@ -220,6 +220,28 @@ const CHARACTERS = [
     basePower: 79,
     characterClass: 'High-speed Striker',
     description: 'Elite football star energy with a confident smile and sharp jawline. High charisma and celebration-ready.'
+  },
+  {
+    id: 'jennie',
+    name: 'Jennie',
+    alias: 'Shadow Demon',
+    avatar: '😈',
+    image: '/characters/jennie.webp',
+    video: '/characters/jennie.mp4',
+    basePower: 85,
+    characterClass: 'Dark Magic Attacker',
+    description: 'Dark, mysterious, and powerful. She radiates a slightly evil energy with her demon-style aura.'
+  },
+  {
+    id: 'chenuki',
+    name: 'Chenuki',
+    alias: 'Heart Enchantress',
+    avatar: '💖',
+    image: '/characters/chenuki.webp',
+    video: '/characters/chenuki.mp4',
+    basePower: 70,
+    characterClass: 'Charm Support',
+    description: 'Romantic, kind, and elegant. Her soft but powerful charm energy can weaken enemies or boost teammates.'
   }
 ];
 
