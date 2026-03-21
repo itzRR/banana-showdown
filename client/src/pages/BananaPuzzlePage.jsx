@@ -102,7 +102,7 @@ function BananaPuzzlePage() {
     setAnswered(false);
     setEnergyAnim(null);
     try {
-      const res = await api.get('/api/puzzle');
+      const res = await api.get('/api/puzzle'); //The frontend then asks my backend for this puzzle
       setPuzzle(res.data);
     } catch (err) {
       setError(err.response?.data?.error || 'Could not reach the Banana Oracle. Try again!');
@@ -313,7 +313,7 @@ function BananaPuzzlePage() {
 
               {/* Answer section */}
               {!answered ? (
-                <form onSubmit={handleSubmit} className="trials-answer-form">
+                <form onSubmit={handleSubmit} className="trials-answer-form"> /*When  submit an answer, this event checks if it is correct*/
                   <div className="trials-answer-label">Choose Your Answer</div>
                   <DigitPad value={userAnswer} onChange={setUserAnswer} disabled={submitting} />
                   <div className="trials-selected-display">

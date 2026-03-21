@@ -17,6 +17,14 @@
       "username": "RR",
       "password": "$2a$10$lNON4KdC5raaTdkPGtF8b.a7KiNaZeRFUHJsZ8YzDi/3bAG3OI9.e",
       "createdAt": "2026-03-01T12:18:37.490Z"
+    },
+    {
+      "id": "user_1773935587747",
+      "username": "Rehan",
+      "password": "$2a$10$KcjT.AzJPj1BEUWC7XHM3uunsP6Li3rKepFhieiL7XLeYICvy2Nim",
+      "createdAt": "2026-03-19T15:53:07.747Z",
+      "energy": 45,
+      "streak": 3
     }
   ],
   "leaderboard": [

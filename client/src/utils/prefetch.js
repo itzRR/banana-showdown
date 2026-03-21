@@ -29,7 +29,6 @@ const CHARACTER_VIDEOS = [
   '/characters/nethmi.mp4',
   '/characters/Pasan.mp4',
   '/characters/Abdur.mp4',
-  '/characters/Jennie.mp4',
   '/characters/Chenuki.mp4',
 ];
 

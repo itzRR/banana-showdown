@@ -222,17 +222,6 @@ const CHARACTERS = [
     description: 'Elite football star energy with a confident smile and sharp jawline. High charisma and celebration-ready.'
   },
   {
-    id: 'jennie',
-    name: 'Jennie',
-    alias: 'Shadow Demon',
-    avatar: '😈',
-    image: '/characters/jennie.webp',
-    video: '/characters/Jennie.mp4',
-    basePower: 71,
-    characterClass: 'Dark Magic Attacker',
-    description: 'Dark, mysterious, and powerful. She radiates a slightly evil energy with her demon-style aura.'
-  },
-  {
     id: 'chenuki',
     name: 'Chenuki',
     alias: 'Heart Enchantress',
@@ -268,7 +257,7 @@ function CharacterCard({ char, isSelected, onSelect }) {
     <div
       id={`character-${char.id}`}
       className={`character-card${isSelected ? ' selected' : ''}`}
-      onClick={() => onSelect(char)}
+      onClick={() => onSelect(char)} /*When  click a character, this event happen*/
       role="button"
       tabIndex={0}
       onKeyDown={e => e.key === 'Enter' && onSelect(char)}
