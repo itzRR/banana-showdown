@@ -313,7 +313,7 @@ function BananaPuzzlePage() {
 
               {/* Answer section */}
               {!answered ? (
-                <form onSubmit={handleSubmit} className="trials-answer-form"> /*When  submit an answer, this event checks if it is correct*/
+                <form onSubmit={handleSubmit} className="trials-answer-form">
                   <div className="trials-answer-label">Choose Your Answer</div>
                   <DigitPad value={userAnswer} onChange={setUserAnswer} disabled={submitting} />
                   <div className="trials-selected-display">
