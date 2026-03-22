@@ -24,10 +24,11 @@ app.use(cookieParser());
 app.use(cors({ origin: true, credentials: true }));
 
 // --- Routes ---
-app.use('/api/auth', authRoutes);
-app.use('/api/game', gameRoutes);
-app.use('/api/leaderboard', leaderboardRoutes);
-app.use('/api/puzzle', puzzleRoutes);
+// API endpoints used by the frontend client
+app.use('/api/auth', authRoutes); // Handles user authentication & sessions
+app.use('/api/game', gameRoutes); // Core game interactions and logic
+app.use('/api/leaderboard', leaderboardRoutes); // Global scoring & rankings
+app.use('/api/puzzle', puzzleRoutes); // Logic for puzzle generation and validation
 
 // Health check
 app.get('/', (req, res) => {
