@@ -71,3 +71,6 @@ To run the application locally on your machine, you need to set up both the fron
 ## 🌐 Deployment
 The app is configured to be deployed on **Vercel**. 
 The `vercel.json` file handles routing API requests to the `/api/index.js` serverless function and redirects other traffic to the static React frontend build.
+
+## 🤝 Contributing
+Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
