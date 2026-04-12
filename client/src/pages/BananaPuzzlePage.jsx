@@ -181,7 +181,7 @@ function BananaPuzzlePage() {
           The Oracle's Chamber
         </h1>
         <p className="trials-hero-sub">
-          Solve the sacred equations — earn <span className="trials-accent">⚡ energy</span> to dominate The Arena
+          Solve the sacred equations - earn <span className="trials-accent">⚡ energy</span> to dominate The Arena
         </p>
       </div>
 
